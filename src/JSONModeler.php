@@ -177,13 +177,13 @@ class JSONModeler {
             } else if ($arrayType === 'double' && $itemType === 'integer') {
                 continue;
             } else if ($arrayType !== $itemType) {
-                return null;
+                return [null];
             }
         }
 
         switch ($arrayType) {
             case null:
-                return null;
+                return [null];
 
             case 'object':
                 return [$this->combineArrayObjects($example)];
@@ -209,7 +209,7 @@ class JSONModeler {
      * @param array $example
      * @return \stdClass
      */
-    protected function combineArrayObjects(array $example): \stdClass {
+    protected function combineArrayObjects(array $example): ?\stdClass {
         $type = new \stdClass();
         foreach ($example as $object) {
             foreach (get_object_vars($object) as $field => $fieldExample) {
