@@ -108,9 +108,7 @@ class JSONModeler {
                 json_last_error_msg());
         }
 
-        $decoded = $this->sanitizeInput($decoded);
-
-        return $lang->parser()->parse($typeName, $decoded);
+        return $lang->parser()->parse($typeName, $this->sanitizeInput($decoded));
     }
 
     /**
