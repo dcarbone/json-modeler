@@ -187,7 +187,7 @@ class JSONModeler {
             }
             return [$this->sanitizeArrayItems($subExample)];
         } else {
-            return $example;
+            return [$this->sanitizeInput(reset($example))];
         }
     }
 
