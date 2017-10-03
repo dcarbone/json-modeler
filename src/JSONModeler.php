@@ -186,12 +186,12 @@ class JSONModeler {
                 return [null];
 
             case 'object':
-                return [$this->combineArrayObjects($example)];
+                return [$this->combineObjects($example)];
             case 'array':
                 $subExample = [];
                 foreach ($example as $subExample) {
-                    foreach ($subExample as $key => $subItem) {
-                        $subExample[$key] = $subItem;
+                    foreach ($subExample as $subItem) {
+                        $subExample[] = $subItem;
                     }
                 }
                 return [$this->sanitizeArrayItems($subExample)];
@@ -206,30 +206,36 @@ class JSONModeler {
     }
 
     /**
-     * @param array $example
+     * @param array $examples
      * @return \stdClass
      */
-    protected function combineArrayObjects(array $example): ?\stdClass {
+    protected function combineObjects(array $examples): ?\stdClass {
         $type = new \stdClass();
-        foreach ($example as $object) {
+        foreach ($examples as $object) {
             foreach (get_object_vars($object) as $field => $fieldExample) {
-                if (!property_exists($type, $field)) {
-                    $type->{$field} = $fieldExample;
-                } else if ($fieldExample === null) {
+                if (!isset($type->{$field})) {
+                    $type->{$field} = $this->sanitizeInput($fieldExample);
                     continue;
-                } else {
-                    $currentType = gettype($type->{$field});
-                    $fieldExampleType = gettype($fieldExample);
-                    if ($currentType === $fieldExampleType || ($currentType === 'double' && $fieldExampleType === 'integer')) {
-                        continue;
-                    } else if ($type->{$field} === null && $fieldExample !== null) {
-                        $type->{$field} = $fieldExample;
-                    } else if ($currentType === 'integer' && $fieldExampleType === 'double') {
-                        $type->{$field} = 1.1;
-                    } else if ($currentType !== $fieldExampleType) {
-                        $type->{$field} = null;
-                        break;
-                    }
+                }
+
+                if ($fieldExample === null) {
+                    continue;
+                }
+
+                $ct = gettype($type->{$field});
+                $et = gettype($fieldExample);
+
+                if ($ct === 'object' && $et === 'object') {
+                    $type->{$field} = $this->combineObjects([$type->{$field}, $fieldExample]);;
+                } else if ($ct === 'array' && $et === 'array') {
+                    $type->{$field} = $this->sanitizeArrayItems(array_merge($type->{$field}, $fieldExample));
+                } else if ($ct === 'integer' && $et === 'double') {
+                    $type->{$field} = 1.1;
+                } else if ($ct === $et || ($ct === 'double' && $et === 'integer')) {
+                    continue;
+                } else if ($ct !== $et) {
+                    $type->{$field} = null;
+                    break;
                 }
             }
         }
