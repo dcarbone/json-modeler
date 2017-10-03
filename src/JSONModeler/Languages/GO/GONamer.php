@@ -75,7 +75,7 @@ class GONamer implements Namer {
     ];
 
     /** @var \DCarbone\JSONModeler\Language */
-    private $language;
+    protected $language;
 
     /**
      * GONamer constructor.

@@ -23,7 +23,7 @@ use DCarbone\JSONModeler\Writer;
  */
 class GOWriter implements Writer {
     /** @var \DCarbone\JSONModeler\Language */
-    private $language;
+    protected $language;
 
     /**
      * GOWriter constructor.

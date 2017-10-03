@@ -24,7 +24,7 @@ use DCarbone\JSONModeler\TypeParent;
  */
 class GOParser implements Parser {
     /** @var \DCarbone\JSONModeler\Language */
-    private $language;
+    protected $language;
 
     /**
      * GOParser constructor.

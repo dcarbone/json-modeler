@@ -35,7 +35,7 @@ class GOTyper implements Typer {
     const RAWMESSAGE = 'raw';
 
     /** @var \DCarbone\JSONModeler\Language */
-    private $language;
+    protected $language;
 
     /**
      * GOTyper constructor.
