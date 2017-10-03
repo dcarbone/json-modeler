@@ -150,7 +150,9 @@ class JSONModeler {
                 foreach (get_object_vars($tmp) as $k => $v) {
                     $tmp->{$k} = $this->sanitizeInput($v);
                 }
-                return $tmp;
+                $forTheSorts = json_decode(json_encode($tmp), true);
+                ksort($forTheSorts, SORT_NATURAL);
+                return json_decode(json_encode($forTheSorts));
 
             default:
                 return null;
@@ -216,6 +218,8 @@ class JSONModeler {
             $type->{$field} = $this->sanitizeInput($fieldExample);
         }
 
-        return $type;
+        $forTheSorts = json_decode(json_encode($type), true);
+        ksort($forTheSorts, SORT_NATURAL);
+        return json_decode(json_encode($forTheSorts));
     }
 }
