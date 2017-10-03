@@ -186,15 +186,15 @@ class JSONModeler {
                 return [null];
 
             case 'object':
-                return [$this->combineObjects($example)];
+                return [$this->combineObjects(array_filter($example, function($v) { return is_object($v); }))];
             case 'array':
-                $subExample = [];
+                $examples = [];
                 foreach ($example as $subExample) {
                     foreach ($subExample as $subItem) {
-                        $subExample[] = $subItem;
+                        $examples[] = $subItem;
                     }
                 }
-                return [$this->sanitizeArrayItems($subExample)];
+                return [$this->sanitizeArrayItems($examples)];
             case 'double':
                 return [1.1];
             case 'integer':
@@ -226,7 +226,7 @@ class JSONModeler {
                 $et = gettype($fieldExample);
 
                 if ($ct === 'object' && $et === 'object') {
-                    $type->{$field} = $this->combineObjects([$type->{$field}, $fieldExample]);;
+                    $type->{$field} = $this->combineObjects([$type->{$field}, $fieldExample]);
                 } else if ($ct === 'array' && $et === 'array') {
                     $type->{$field} = $this->sanitizeArrayItems(array_merge($type->{$field}, $fieldExample));
                 } else if ($ct === 'integer' && $et === 'double') {
