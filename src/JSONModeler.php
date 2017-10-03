@@ -170,23 +170,28 @@ class JSONModeler {
             $itemType = gettype($item);
             if (!isset($arrayType)) {
                 $arrayType = $itemType;
+            } else if ($arrayType === $itemType) {
+                continue;
             } else if ($arrayType === 'integer' && $itemType === 'double') {
                 $arrayType = 'double';
             } else if ($arrayType === 'double' && $itemType === 'integer') {
                 continue;
             } else if ($arrayType !== $itemType) {
-                return [null];
+                return null;
             }
         }
 
         switch ($arrayType) {
+            case null:
+                return null;
+
             case 'object':
                 return [$this->combineArrayObjects($example)];
             case 'array':
                 $subExample = [];
                 foreach ($example as $subExample) {
-                    foreach ($subExample as $subItem) {
-                        $subExample[] = $subItem;
+                    foreach ($subExample as $key => $subItem) {
+                        $subExample[$key] = $subItem;
                     }
                 }
                 return [$this->sanitizeArrayItems($subExample)];
@@ -212,20 +217,30 @@ class JSONModeler {
                     $type->{$field} = $fieldExample;
                 } else if ($fieldExample === null) {
                     continue;
-                } else if ($type->{$field} === null && $fieldExample !== null) {
-                    $type->{$field} = $fieldExample;
-                } else if (gettype($type->{$field}) === 'integer' && gettype($fieldExample) === 'double') {
-                    $type->{$field} = 1.0;
-                } else if (gettype($type->{$field}) === 'double' && gettype($fieldExample) === 'integer') {
-                    continue;
-                } else if (gettype($type->{$field}) !== gettype($fieldExample)) {
-                    $type->{$field} = null;
-                    break;
+                } else {
+                    $currentType = gettype($type->{$field});
+                    $fieldExampleType = gettype($fieldExample);
+                    if ($currentType === $fieldExampleType || ($currentType === 'double' && $fieldExampleType === 'integer')) {
+                        continue;
+                    } else if ($type->{$field} === null && $fieldExample !== null) {
+                        $type->{$field} = $fieldExample;
+                    } else if ($currentType === 'integer' && $fieldExampleType === 'double') {
+                        $type->{$field} = 1.1;
+                    } else if ($currentType !== $fieldExampleType) {
+                        $type->{$field} = null;
+                        break;
+                    }
                 }
             }
         }
 
-        foreach (get_object_vars($type) as $field => $fieldExample) {
+        $vars = get_object_vars($type);
+
+        if (count($vars) === 0) {
+            return null;
+        }
+
+        foreach ($vars as $field => $fieldExample) {
             $type->{$field} = $this->sanitizeInput($fieldExample);
         }
 

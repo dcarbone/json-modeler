@@ -8,10 +8,6 @@
  */
 
 use DCarbone\JSONModeler\Language;
-use DCarbone\JSONModeler\Languages\GO\Types\InterfaceType;
-use DCarbone\JSONModeler\Languages\GO\Types\MapType;
-use DCarbone\JSONModeler\Languages\GO\Types\SliceType;
-use DCarbone\JSONModeler\Type;
 use DCarbone\JSONModeler\TypeParent;
 use DCarbone\JSONModeler\Typer;
 
@@ -91,80 +87,5 @@ class GOTyper implements Typer {
         }
 
         return self::INTERFACE;
-    }
-
-    /**
-     * @param \DCarbone\JSONModeler\Type $type
-     * @return bool
-     */
-    public function isSimpleGoType(Type $type) {
-        return $type instanceof Types\SimpleType;
-    }
-
-    /**
-     * @param \DCarbone\JSONModeler\Type $type1
-     * @param \DCarbone\JSONModeler\Type $type2
-     * @return \DCarbone\JSONModeler\Type
-     */
-    public function mostSpecificPossibleSimpleGoType(Type $type1, Type $type2): Type {
-        if (get_class($type1) === get_class($type2)) {
-            return $type1;
-        }
-
-        if ('float' === substr($type1->type(), 0, 5) && 'int' === substr($type2->type(), 0, 3)) {
-            return $type1;
-        }
-
-        if ('int' === substr($type1->type(), 0, 3) && 'float' === substr($type2->type(), 0, 5)) {
-            return $type1;
-        }
-
-        return new Types\InterfaceType($type1->name(), $type1->example());
-    }
-
-    /**
-     * @param \DCarbone\JSONModeler\Type $type1
-     * @param \DCarbone\JSONModeler\Type $type2
-     * @return \DCarbone\JSONModeler\Type
-     */
-    public function mostSpecificPossibleComplexGoType(Type $type1, Type $type2): Type {
-        if ($type1 instanceof SliceType && $type2 instanceof SliceType) {
-            $compType = $this->mostSpecificPossibleGoType($type1->sliceType(), $type2->sliceType());
-            if (!($compType instanceof Types\InterfaceType)) {
-                return $type1;
-            }
-        } else if ($type1 instanceof Types\MapType && $type2 instanceof MapType) {
-            $compType = $this->mostSpecificPossibleGoType($type1->mapType(), $type2->mapType());
-            if (!($compType instanceof InterfaceType)) {
-                return $type1;
-            }
-        } else if ($type1 instanceof Types\StructType && $type2 instanceof Types\StructType) {
-            // TODO: This is a terrible assumption...
-            return new Types\StructType(
-                $type1->name(),
-                json_decode(json_encode(get_object_vars($type1->example()) + get_object_vars($type2->example())))
-            );
-        } else if (get_class($type1) === get_class($type2)) {
-            return $type1;
-        } else if ($type1 instanceof Types\InterfaceType && !($type2 instanceof InterfaceType)) {
-            return $type2;
-        } else if (!($type1 instanceof Types\InterfaceType) && $type2 instanceof Types\InterfaceType) {
-            return $type1;
-        }
-
-        return new Types\InterfaceType($type1->name(), $type1->example());
-    }
-
-    /**
-     * @param \DCarbone\JSONModeler\Type $type1
-     * @param \DCarbone\JSONModeler\Type $type2
-     * @return \DCarbone\JSONModeler\Type
-     */
-    public function mostSpecificPossibleGoType(Type $type1, Type $type2): Type {
-        if ($this->isSimpleGoType($type1) && $this->isSimpleGoType($type2)) {
-            return $this->mostSpecificPossibleSimpleGoType($type1, $type2);
-        }
-
-        return $this->mostSpecificPossibleComplexGoType($type1, $type2);
     }
 }
