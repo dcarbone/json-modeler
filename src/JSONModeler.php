@@ -27,7 +27,7 @@ class JSONModeler {
      */
     public function __construct(array $languages = []) {
         if (count($languages) === 0) {
-            foreach(glob(__DIR__.'/JSONModeler/Languages/*', GLOB_NOSORT | GLOB_ONLYDIR) as $langDir) {
+            foreach (glob(__DIR__.'/JSONModeler/Languages/*', GLOB_NOSORT | GLOB_ONLYDIR) as $langDir) {
                 $lang = trim(strrchr($langDir, '/'), "/");
                 if (file_exists(($langFile = "{$langDir}/{$lang}Language.php"))) {
                     $confClass = __NAMESPACE__.'\\'.__CLASS__."\\Languages\\{$lang}Configuration";
@@ -38,7 +38,7 @@ class JSONModeler {
                 }
             }
         } else {
-            foreach($languages as $language) {
+            foreach ($languages as $language) {
                 $this->addLanguage($language);
             }
         }
@@ -88,23 +88,23 @@ class JSONModeler {
         }
 
         $typeName = trim($typeName);
-        if ('' === $typeName || !preg_match('/' . self::TYPE_NAME_REGEX . '/', $typeName)) {
-            throw new \InvalidArgumentException(get_class($this) .
-                '::generate - Root type name must follow "' . self::TYPE_NAME_REGEX . '", ' .
-                $typeName .
+        if ('' === $typeName || !preg_match('/'.self::TYPE_NAME_REGEX.'/', $typeName)) {
+            throw new \InvalidArgumentException(get_class($this).
+                '::generate - Root type name must follow "'.self::TYPE_NAME_REGEX.'", '.
+                $typeName.
                 ' does not.');
         }
 
         $input = trim($input);
         if ('' === $input) {
-            throw new \RuntimeException(get_class($this) .
+            throw new \RuntimeException(get_class($this).
                 '::generate - Input is empty, please re-construct with valid input');
         }
 
         $decoded = json_decode($input);
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new \RuntimeException(get_class($this) .
-                '::generate - Unable to json_decode input: ' .
+            throw new \RuntimeException(get_class($this).
+                '::generate - Unable to json_decode input: '.
                 json_last_error_msg());
         }
 
@@ -134,7 +134,7 @@ class JSONModeler {
             case 'string':
                 return 'string';
             case 'double':
-                return 1.0;
+                return 1.1;
             case 'integer':
                 return 1;
             case 'boolean':
@@ -163,31 +163,40 @@ class JSONModeler {
      */
     protected function sanitizeArrayItems(array $example): array {
         $arrayType = null;
-        foreach($example as $item) {
+        foreach ($example as $item) {
             if ($item === null) {
                 continue;
             }
             $itemType = gettype($item);
             if (!isset($arrayType)) {
                 $arrayType = $itemType;
-            } else if ($arrayType === 'int' && $itemType === 'double') {
-                $arrayType = 'float';
+            } else if ($arrayType === 'integer' && $itemType === 'double') {
+                $arrayType = 'double';
+            } else if ($arrayType === 'double' && $itemType === 'integer') {
+                continue;
             } else if ($arrayType !== $itemType) {
                 return [null];
             }
         }
-        if ($arrayType === 'object') {
-            return [$this->combineArrayObjects($example)];
-        } else if ($arrayType === 'array') {
-            $subExample = [];
-            foreach($example as $subExample) {
-                foreach($subExample as $subItem) {
-                    $subExample[] = $subItem;
+
+        switch ($arrayType) {
+            case 'object':
+                return [$this->combineArrayObjects($example)];
+            case 'array':
+                $subExample = [];
+                foreach ($example as $subExample) {
+                    foreach ($subExample as $subItem) {
+                        $subExample[] = $subItem;
+                    }
                 }
-            }
-            return [$this->sanitizeArrayItems($subExample)];
-        } else {
-            return [$this->sanitizeInput(reset($example))];
+                return [$this->sanitizeArrayItems($subExample)];
+            case 'double':
+                return [1.1];
+            case 'integer':
+                return [1];
+
+            default:
+                return [$this->sanitizeInput(reset($example))];
         }
     }
 
@@ -197,14 +206,18 @@ class JSONModeler {
      */
     protected function combineArrayObjects(array $example): \stdClass {
         $type = new \stdClass();
-        foreach($example as $object) {
-            foreach(get_object_vars($object) as $field => $fieldExample) {
+        foreach ($example as $object) {
+            foreach (get_object_vars($object) as $field => $fieldExample) {
                 if (!property_exists($type, $field)) {
                     $type->{$field} = $fieldExample;
                 } else if ($fieldExample === null) {
                     continue;
                 } else if ($type->{$field} === null && $fieldExample !== null) {
                     $type->{$field} = $fieldExample;
+                } else if (gettype($type->{$field}) === 'integer' && gettype($fieldExample) === 'double') {
+                    $type->{$field} = 1.0;
+                } else if (gettype($type->{$field}) === 'double' && gettype($fieldExample) === 'integer') {
+                    continue;
                 } else if (gettype($type->{$field}) !== gettype($fieldExample)) {
                     $type->{$field} = null;
                     break;
@@ -212,7 +225,7 @@ class JSONModeler {
             }
         }
 
-        foreach(get_object_vars($type) as $field => $fieldExample) {
+        foreach (get_object_vars($type) as $field => $fieldExample) {
             $type->{$field} = $this->sanitizeInput($fieldExample);
         }
 
