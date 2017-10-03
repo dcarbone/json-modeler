@@ -7,6 +7,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use DCarbone\JSONModeler\Language;
 use DCarbone\JSONModeler\Languages\GO\Types\InterfaceType;
 use DCarbone\JSONModeler\Languages\GO\Types\MapType;
 use DCarbone\JSONModeler\Languages\GO\Types\SliceType;
@@ -33,15 +34,15 @@ class GOTyper implements Typer {
     const INTERFACE = 'interface{}';
     const RAWMESSAGE = 'raw';
 
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOConfiguration */
-    protected $configuration;
+    /** @var \DCarbone\JSONModeler\Language */
+    private $language;
 
     /**
      * GOTyper constructor.
-     * @param \DCarbone\JSONModeler\Languages\GO\GOConfiguration $configuration
+     * @param \DCarbone\JSONModeler\Language $language
      */
-    public function __construct(GOConfiguration $configuration) {
-        $this->configuration = $configuration;
+    public function __construct(Language $language) {
+        $this->language = $language;
     }
 
     /**
@@ -58,11 +59,11 @@ class GOTyper implements Typer {
         }
 
         if ('integer' === $type) {
-            if ($this->configuration->get(GOConfiguration::KEY_ForceIntToFloat)) {
+            if ($this->language->configuration()->get(GOConfiguration::KEY_ForceIntToFloat)) {
                 return self::FLOAT64;
             }
 
-            if ($this->configuration->get(GOConfiguration::KEY_UseSimpleInt)) {
+            if ($this->language->configuration()->get(GOConfiguration::KEY_UseSimpleInt)) {
                 return self::INT;
             }
 

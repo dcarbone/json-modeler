@@ -41,10 +41,10 @@ class GOLanguage implements Language {
             $configuration = new GOConfiguration();
         }
         $this->configuration = $configuration;
-        $this->namer = new GONamer();
-        $this->typer = new GOTyper($this->configuration);
-        $this->parser = new GOParser($this->configuration, $this->typer);
-        $this->writer = new GOWriter($this->configuration, $this->namer);
+        $this->namer = new GONamer($this);
+        $this->typer = new GOTyper($this);
+        $this->parser = new GOParser($this);
+        $this->writer = new GOWriter($this);
     }
 
     /**

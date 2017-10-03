@@ -7,6 +7,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use DCarbone\JSONModeler\Language;
 use DCarbone\JSONModeler\Languages\GO\Types\InterfaceType;
 use DCarbone\JSONModeler\Languages\GO\Types\MapType;
 use DCarbone\JSONModeler\Languages\GO\Types\RawMessageType;
@@ -21,20 +22,15 @@ use DCarbone\JSONModeler\Writer;
  * @package DCarbone\JSONModeler\Languages\GO
  */
 class GOWriter implements Writer {
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOConfiguration */
-    protected $configuration;
-
-    /** @var \DCarbone\JSONModeler\Languages\GO\GONamer */
-    protected $namer;
+    /** @var \DCarbone\JSONModeler\Language */
+    private $language;
 
     /**
      * GOWriter constructor.
-     * @param \DCarbone\JSONModeler\Languages\GO\GOConfiguration $configuration
-     * @param \DCarbone\JSONModeler\Languages\GO\GONamer $namer
+     * @param \DCarbone\JSONModeler\Language $language
      */
-    public function __construct(GOConfiguration $configuration, GONamer $namer) {
-        $this->configuration = $configuration;
-        $this->namer = $namer;
+    public function __construct(Language $language) {
+        $this->language = $language;
     }
 
     public function write(Type $type, int $indentLevel = 0): string {
@@ -62,7 +58,7 @@ class GOWriter implements Writer {
      */
     protected function writeInterface(Types\InterfaceType $type, int $indentLevel = 0): string {
         if (null === $type->parent()) {
-            return sprintf('type %s %s', $this->namer->typeName($type), $type->type());
+            return sprintf('type %s %s', $this->language->namer()->typeName($type), $type->type());
         }
 
         return $type->type();
@@ -80,22 +76,22 @@ class GOWriter implements Writer {
 
         $parent = $type->parent();
 
-        if ($this->configuration->get(GOConfiguration::KEY_BreakOutInlineStructs)) {
+        if ($this->language->configuration()->get(GOConfiguration::KEY_BreakOutInlineStructs)) {
             if ($mapType instanceof StructType) {
                 $output[] =
-                    sprintf('type %s map[string]*%s', $this->namer->typeMapName($type), $this->namer->typeName($type));
+                    sprintf('type %s map[string]*%s', $this->language->namer()->typeMapName($type), $this->namer->typeName($type));
                 $output[] = $this->write($mapType, $indentLevel);
             } else if (null === $parent) {
-                $output[] = sprintf('type %s map[string]%s', $this->namer->typeName($type), $this->write($mapType));
+                $output[] = sprintf('type %s map[string]%s', $this->language->namer()->typeName($type), $this->write($mapType));
             } else if ($parent instanceof SliceType || $parent instanceof MapType) {
                 $output[] = sprintf('map[string]%s', $this->write($mapType, $indentLevel));
             } else {
-                $output[] = sprintf('type %s map[string]%s', $this->namer->typeMapName($type), $this->write($mapType));
+                $output[] = sprintf('type %s map[string]%s', $this->language->namer()->typeMapName($type), $this->write($mapType));
             }
         } else if (null === $parent) {
             $output[] = sprintf(
                 'type %s map[string]%s',
-                $this->namer->typeName($type),
+                $this->language->namer()->typeName($type),
                 $this->write($mapType, $indentLevel)
             );
         } else {
@@ -114,7 +110,7 @@ class GOWriter implements Writer {
         if (null === $type->parent()) {
             return sprintf(
                 'type %s %s',
-                $this->namer->typeName($type),
+                $this->language->namer()->typeName($type),
                 $type->type()
             );
         }
@@ -131,13 +127,13 @@ class GOWriter implements Writer {
         if (null === $type->parent()) {
             return sprintf(
                 'type %s %s%s',
-                $this->namer->typeName($type),
-                $this->configuration->get(GOConfiguration::KEY_ForceScalarToPointer) ? '*' : '',
+                $this->language->namer()->typeName($type),
+                $this->language->configuration()->get(GOConfiguration::KEY_ForceScalarToPointer) ? '*' : '',
                 $type->type()
             );
         }
 
-        if ($this->configuration->get(GOConfiguration::KEY_ForceScalarToPointer)) {
+        if ($this->language->configuration()->get(GOConfiguration::KEY_ForceScalarToPointer)) {
             return sprintf('*%s', $type->type());
         }
 
@@ -155,27 +151,27 @@ class GOWriter implements Writer {
         $sliceType = $type->sliceType();
         $parent = $type->parent();
 
-        if ($this->configuration->get(GOConfiguration::KEY_BreakOutInlineStructs)) {
+        if ($this->language->configuration()->get(GOConfiguration::KEY_BreakOutInlineStructs)) {
             if ($sliceType instanceof StructType) {
                 if ($parent instanceof SliceType) {
-                    $output[] = sprintf('[]*%s', $this->namer->typeName($sliceType));
+                    $output[] = sprintf('[]*%s', $this->language->namer()->typeName($sliceType));
                 } else {
                     $output[] =
-                        sprintf('type %s []*%s', $this->namer->typeSliceName($type), $this->namer->typeName($type));
+                        sprintf('type %s []*%s', $this->language->namer()->typeSliceName($type), $this->namer->typeName($type));
                 }
 
                 $output[] = $this->write($sliceType, $indentLevel);
             } else if (null === $parent) {
-                $output[] = sprintf('type %s []%s', $this->namer->typeName($type), $this->write($sliceType));
+                $output[] = sprintf('type %s []%s', $this->language->namer()->typeName($type), $this->write($sliceType));
             } else if ($parent instanceof SliceType || $parent instanceof MapType) {
                 $output[] = sprintf('[]%s', $this->write($sliceType, $indentLevel));
             } else {
-                $output[] = sprintf('type %s []%s', $this->namer->typeSliceName($type), $this->write($sliceType));
+                $output[] = sprintf('type %s []%s', $this->language->namer()->typeSliceName($type), $this->write($sliceType));
             }
         } else if (null === $parent) {
             $output[] = sprintf(
                 'type %s []%s',
-                $this->namer->typeName($type),
+                $this->language->namer()->typeName($type),
                 $this->write($sliceType, $indentLevel)
             );
         } else {
@@ -193,13 +189,13 @@ class GOWriter implements Writer {
     protected function writeStruct(StructType $type, int $indentLevel = 0): string {
         $output = [];
 
-        $breakOutInlineStructs = $this->configuration->get(GOConfiguration::KEY_BreakOutInlineStructs);
+        $breakOutInlineStructs = $this->language->configuration()->get(GOConfiguration::KEY_BreakOutInlineStructs);
         $parent = $type->parent();
 
         if ($breakOutInlineStructs || null === $parent) {
             $go = sprintf(
                 "type %s %s {\n",
-                $this->namer->typeName($type),
+                $this->language->namer()->typeName($type),
                 $type->type()
             );
         } else {
@@ -210,27 +206,27 @@ class GOWriter implements Writer {
         }
 
         foreach ($type->fields() as $field) {
-            if ($this->configuration->isFieldIgnored($type, $field)) {
-                $this->configuration->logger()->info(sprintf('[json-to-go] Ignoring field "%s" in struct "%s"',
+            if ($this->language->configuration()->isFieldIgnored($type, $field)) {
+                $this->language->configuration()->logger()->info(sprintf('[json-to-go] Ignoring field "%s" in struct "%s"',
                     $field->name(),
                     $type->name()));
                 continue;
             }
 
-            $this->configuration->logger()->debug(sprintf('[json-to-go] Writing field "%s" in struct "%s"',
+            $this->language->configuration()->logger()->debug(sprintf('[json-to-go] Writing field "%s" in struct "%s"',
                 $field->name(),
                 $type->name()));
 
-            $exported = $this->configuration->isFieldExported($type, $field);
+            $exported = $this->language->configuration()->isFieldExported($type, $field);
 
             $go = sprintf(
                 '%s%s%s',
                 $go,
                 $this->indents($indentLevel + 1),
-                $exported ? $this->namer->goName($field) : lcfirst($this->namer->goName($field))
+                $exported ? $this->language->namer()->goName($field) : lcfirst($this->namer->goName($field))
             );
 
-            $fieldTag = $this->configuration->buildFieldTag($type, $field);
+            $fieldTag = $this->language->configuration()->buildFieldTag($type, $field);
 
             $fieldTag = trim($fieldTag, " \t\n\r\0\x0B`");
             if ('' !== $fieldTag) {
@@ -245,21 +241,21 @@ class GOWriter implements Writer {
                     $go = sprintf(
                         '%s *%s%s',
                         $go,
-                        $this->namer->typeName($field),
+                        $this->language->namer()->typeName($field),
                         $fieldTag
                     );
                 } else if ($field instanceof SliceType) {
                     $go = sprintf(
                         '%s %s%s',
                         $go,
-                        $this->namer->typeSliceName($field),
+                        $this->language->namer()->typeSliceName($field),
                         $fieldTag
                     );
                 } else if ($field instanceof MapType) {
                     $go = sprintf(
                         '%s %s%s',
                         $go,
-                        $this->namer->typeMapName($field),
+                        $this->language->namer()->typeMapName($field),
                         $fieldTag
                     );
                 }

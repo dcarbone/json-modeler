@@ -13,6 +13,12 @@
  */
 interface Writer {
     /**
+     * Namer constructor.
+     * @param \DCarbone\JSONModeler\Language $language
+     */
+    public function __construct(Language $language);
+
+    /**
      * @param \DCarbone\JSONModeler\Type $type
      * @param int $indentLevel
      * @return string

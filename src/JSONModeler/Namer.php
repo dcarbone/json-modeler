@@ -13,6 +13,12 @@
  */
 interface Namer {
     /**
+     * Namer constructor.
+     * @param \DCarbone\JSONModeler\Language $language
+     */
+    public function __construct(Language $language);
+
+    /**
      * @param string $name
      * @return string
      */

@@ -7,6 +7,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use DCarbone\JSONModeler\Language;
 use DCarbone\JSONModeler\Languages\GO\Types\InterfaceType;
 use DCarbone\JSONModeler\Languages\GO\Types\MapType;
 use DCarbone\JSONModeler\Languages\GO\Types\RawMessageType;
@@ -22,19 +23,15 @@ use DCarbone\JSONModeler\TypeParent;
  * @package DCarbone\JSONModeler\Languages\GO
  */
 class GOParser implements Parser {
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOConfiguration */
-    protected $configuration;
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOTyper */
-    protected $typer;
+    /** @var \DCarbone\JSONModeler\Language */
+    private $language;
 
     /**
      * GOParser constructor.
-     * @param \DCarbone\JSONModeler\Languages\GO\GOConfiguration $configuration
-     * @param \DCarbone\JSONModeler\Languages\GO\GOTyper $typer
+     * @param \DCarbone\JSONModeler\Language $language
      */
-    public function __construct(GOConfiguration $configuration, GOTyper $typer) {
-        $this->configuration = $configuration;
-        $this->typer = $typer;
+    public function __construct(Language $language) {
+        $this->language = $language;
     }
 
     /**
@@ -44,10 +41,10 @@ class GOParser implements Parser {
      * @return \DCarbone\JSONModeler\Type
      */
     public function parse(string $name, $example, ?TypeParent $parent = null): Type {
-        $goType = $this->typer->type($name, $example, $parent);
+        $goType = $this->language->typer()->type($name, $example, $parent);
         switch ($goType) {
             case GOTyper::STRUCT:
-                if ($this->configuration->get(GOConfiguration::KEY_EmptyStructToInterface) &&
+                if ($this->language->configuration()->get(GOConfiguration::KEY_EmptyStructToInterface) &&
                     count(get_object_vars($example)) === 0) {
                     return new InterfaceType($name, $example);
                 } else {
@@ -77,14 +74,14 @@ class GOParser implements Parser {
         $mapType = new MapType($name, $example, $parent);
 
         $varList = get_object_vars($example);
-        $firstType = $this->typer->type($name, reset($varList), $mapType);
+        $firstType = $this->language->typer()->type($name, reset($varList), $mapType);
 
         if (1 === count($varList)) {
             $type = $this->parse($name, reset($varList), $mapType);
         } else {
             $same = true;
             foreach ($varList as $k => $v) {
-                $thisType = $this->typer->type($name, $v, $mapType);
+                $thisType = $this->language->typer()->type($name, $v, $mapType);
                 if ($firstType !== $thisType) {
                     $same = false;
                     break;
