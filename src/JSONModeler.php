@@ -143,11 +143,7 @@ class JSONModeler {
                 return true;
 
             case 'array':
-                $tmp = $typeExample;
-                foreach ($tmp as $k => &$v) {
-                    $v = $this->sanitizeInput($v);
-                }
-                return array_values(array_unique($tmp, SORT_REGULAR));
+                return $this->sanitizeArrayItems($typeExample);
 
             case 'object':
                 $tmp = $typeExample;
@@ -159,5 +155,67 @@ class JSONModeler {
             default:
                 return null;
         }
+    }
+
+    /**
+     * @param array $example
+     * @return array
+     */
+    protected function sanitizeArrayItems(array $example): array {
+        $arrayType = null;
+        foreach($example as $item) {
+            if ($item === null) {
+                continue;
+            }
+            $itemType = gettype($item);
+            if (!isset($arrayType)) {
+                $arrayType = $itemType;
+            } else if ($arrayType === 'int' && $itemType === 'double') {
+                $arrayType = 'float';
+            } else if ($arrayType !== $itemType) {
+                return [null];
+            }
+        }
+        if ($arrayType === 'object') {
+            return [$this->combineArrayObjects($example)];
+        } else if ($arrayType === 'array') {
+            $subExample = [];
+            foreach($example as $subExample) {
+                foreach($subExample as $subItem) {
+                    $subExample[] = $subItem;
+                }
+            }
+            return [$this->sanitizeArrayItems($subExample)];
+        } else {
+            return $example;
+        }
+    }
+
+    /**
+     * @param array $example
+     * @return \stdClass
+     */
+    protected function combineArrayObjects(array $example): \stdClass {
+        $type = new \stdClass();
+        foreach($example as $object) {
+            foreach(get_object_vars($object) as $field => $fieldExample) {
+                if (!property_exists($type, $field)) {
+                    $type->{$field} = $fieldExample;
+                } else if ($fieldExample === null) {
+                    continue;
+                } else if ($type->{$field} === null && $fieldExample !== null) {
+                    $type->{$field} = $fieldExample;
+                } else if (gettype($type->{$field}) !== gettype($fieldExample)) {
+                    $type->{$field} = null;
+                    break;
+                }
+            }
+        }
+
+        foreach(get_object_vars($type) as $field => $fieldExample) {
+            $type->{$field} = $this->sanitizeInput($fieldExample);
+        }
+
+        return $type;
     }
 }

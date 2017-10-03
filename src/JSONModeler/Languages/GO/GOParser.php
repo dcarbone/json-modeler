@@ -187,7 +187,7 @@ class GOParser implements Parser {
         } else if ($sliceGoType instanceof SliceType) {
             if (2 > count($example)) {
                 // if there is no example or only one example, no further parsing is needed
-                $type = $this->parse($name, reset($typeExample), $sliceType);
+                $type = $this->parse($name, reset($example), $sliceType);
             } else {
                 // if we have more than one child of this slice, loop through and ensure that all child
                 $sliceSubTypeList = [];
