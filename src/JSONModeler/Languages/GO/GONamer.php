@@ -121,9 +121,7 @@ class GONamer implements Namer {
      * @return string
      */
     public function typeName(Type $type): string {
-        $debug = debug_backtrace();
         if ($parent = $type->parent()) {
-            echo "{$type->name()}: {$debug[1]['class']}::{$debug[1]['function']} line {$debug[1]['line']}\n";
             if ($parent instanceof SliceType || $parent instanceof MapType) {
                 return $this->typeName($parent);
             } else {
