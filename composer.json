@@ -1,0 +1,27 @@
+{
+    "name": "dcarbone/json-modeler",
+    "type": "library",
+    "description": "Utility for converting JSON into language-specific models",
+    "license": "MIT",
+    "keywords": [
+        "json",
+        "golang",
+        "go",
+        "php"
+    ],
+    "authors": [
+        {
+            "name": "Daniel Carbone",
+            "email": "daniel.p.carbone@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "psr/log": "@stable"
+    },
+    "autoload": {
+        "psr-4": {
+            "DCarbone\\": "src/"
+        }
+    }
+}
