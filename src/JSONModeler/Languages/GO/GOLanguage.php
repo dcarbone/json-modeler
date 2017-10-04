@@ -40,11 +40,11 @@ class GOLanguage implements Language {
      * @param \DCarbone\JSONModeler\Languages\GO\GOParser|null $parser
      * @param \DCarbone\JSONModeler\Languages\GO\GOWriter|null $writer
      */
-    public function __construct(GOConfiguration $configuration = null,
-                                GONamer $namer = null,
-                                GOTyper $typer = null,
-                                GOParser $parser = null,
-                                GOWriter $writer = null) {
+    public function __construct(?GOConfiguration $configuration = null,
+                                ?GONamer $namer = null,
+                                ?GOTyper $typer = null,
+                                ?GOParser $parser = null,
+                                ?GOWriter $writer = null) {
         $this->configuration = $configuration ?? new GOConfiguration();
         $this->namer = $writer ?? new GONamer($this);
         $this->typer = $typer ?? new GOTyper($this);

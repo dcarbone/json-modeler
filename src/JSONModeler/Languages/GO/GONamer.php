@@ -8,8 +8,6 @@
  */
 
 use DCarbone\JSONModeler\Language;
-use DCarbone\JSONModeler\Languages\GO\Types\MapType;
-use DCarbone\JSONModeler\Languages\GO\Types\SliceType;
 use DCarbone\JSONModeler\Namer;
 use DCarbone\JSONModeler\Type;
 
@@ -134,7 +132,7 @@ class GONamer implements Namer {
      */
     public function typeName(Type $type): string {
         if ($parent = $type->parent()) {
-            if ($parent instanceof SliceType || $parent instanceof MapType) {
+            if ($parent instanceof Types\SliceType || $parent instanceof Types\MapType) {
                 return $this->typeName($parent);
             } else {
                 return "{$this->typeName($parent)}{$this->goName($type)}";

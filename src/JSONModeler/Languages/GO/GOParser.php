@@ -8,12 +8,6 @@
  */
 
 use DCarbone\JSONModeler\Language;
-use DCarbone\JSONModeler\Languages\GO\Types\InterfaceType;
-use DCarbone\JSONModeler\Languages\GO\Types\MapType;
-use DCarbone\JSONModeler\Languages\GO\Types\RawMessageType;
-use DCarbone\JSONModeler\Languages\GO\Types\SimpleType;
-use DCarbone\JSONModeler\Languages\GO\Types\SliceType;
-use DCarbone\JSONModeler\Languages\GO\Types\StructType;
 use DCarbone\JSONModeler\Parser;
 use DCarbone\JSONModeler\Type;
 use DCarbone\JSONModeler\TypeParent;
@@ -46,7 +40,7 @@ class GOParser implements Parser {
             case GOTyper::STRUCT:
                 if ($this->language->configuration()->get(GOConfiguration::KEY_EmptyStructToInterface) &&
                     count(get_object_vars($example)) === 0) {
-                    return new InterfaceType($name, $example);
+                    return new Types\InterfaceType($name, $example);
                 } else {
                     return $this->parseStruct($name, $example, $parent);
                 }
@@ -55,12 +49,12 @@ class GOParser implements Parser {
             case GOTyper::SLICE:
                 return $this->parseSlice($name, $example, $parent);
             case GOTyper::INTERFACE:
-                return new InterfaceType($name, $example, $parent);
+                return new Types\InterfaceType($name, $example, $parent);
             case GOTyper::RAWMESSAGE:
-                return new RawMessageType($name, $example);
+                return new Types\RawMessageType($name, $example);
 
             default:
-                return new SimpleType($name, $example, $goType);
+                return new Types\SimpleType($name, $example, $goType);
         }
     }
 
@@ -70,8 +64,8 @@ class GOParser implements Parser {
      * @param \DCarbone\JSONModeler\TypeParent|null $parent
      * @return \DCarbone\JSONModeler\Languages\GO\Types\MapType
      */
-    protected function parseMap(string $name, \stdClass $example, ?TypeParent $parent = null): MapType {
-        $mapType = new MapType($name, $example, $parent);
+    protected function parseMap(string $name, \stdClass $example, ?TypeParent $parent = null): Types\MapType {
+        $mapType = new Types\MapType($name, $example, $parent);
 
         $varList = get_object_vars($example);
         $firstType = $this->language->typer()->type($name, reset($varList), $mapType);
@@ -91,7 +85,7 @@ class GOParser implements Parser {
             if ($same) {
                 $type = $this->parse($name, reset($varList), $mapType);
             } else {
-                $type = new InterfaceType($name, reset($varList));
+                $type = new Types\InterfaceType($name, reset($varList));
             }
 
         }
@@ -107,8 +101,8 @@ class GOParser implements Parser {
      * @param \DCarbone\JSONModeler\TypeParent|null $parent
      * @return \DCarbone\JSONModeler\Languages\GO\Types\StructType
      */
-    protected function parseStruct(string $name, \stdClass $example, ?TypeParent $parent = null): StructType {
-        $structType = new StructType($name, $example, $parent);
+    protected function parseStruct(string $name, \stdClass $example, ?TypeParent $parent = null): Types\StructType {
+        $structType = new Types\StructType($name, $example, $parent);
         foreach (get_object_vars($example) as $childTypeName => $childTypeExample) {
             $structType->addChild($this->parse($childTypeName, $childTypeExample, $structType));
         }
@@ -121,8 +115,8 @@ class GOParser implements Parser {
      * @param \DCarbone\JSONModeler\TypeParent $parent
      * @return \DCarbone\JSONModeler\Languages\GO\Types\SliceType
      */
-    protected function parseSlice(string $name, array $example, ?TypeParent $parent = null): SliceType {
-        $sliceType = new SliceType($name, $example, $parent);
+    protected function parseSlice(string $name, array $example, ?TypeParent $parent = null): Types\SliceType {
+        $sliceType = new Types\SliceType($name, $example, $parent);
         $sliceType->setSliceType($this->parse($name, reset($example)));
         return $sliceType;
     }

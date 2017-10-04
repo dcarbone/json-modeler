@@ -8,7 +8,6 @@
  */
 
 use DCarbone\JSONModeler\Configuration;
-use DCarbone\JSONModeler\Languages\GO\Types\StructType;
 use DCarbone\JSONModeler\Type;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
@@ -63,10 +62,7 @@ class GOConfiguration implements Configuration {
      * @param null|\Psr\Log\LoggerInterface $logger
      */
     public function __construct(array $config = [], ?LoggerInterface $logger = null) {
-        if (!$logger) {
-            $logger = new NullLogger();
-        }
-        $this->setLogger($logger);
+        $this->setLogger($logger ?? new NullLogger());
 
         foreach(static::$defaultValues as $confKey => $defaultValue) {
             $this->options[$confKey] = gettype($defaultValue);
@@ -124,7 +120,7 @@ class GOConfiguration implements Configuration {
      * @param \DCarbone\JSONModeler\Type $field
      * @return bool
      */
-    public function isFieldExported(StructType $struct, Type $field): bool {
+    public function isFieldExported(Types\StructType $struct, Type $field): bool {
         return true;
     }
 

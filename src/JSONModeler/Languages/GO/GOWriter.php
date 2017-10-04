@@ -8,12 +8,6 @@
  */
 
 use DCarbone\JSONModeler\Language;
-use DCarbone\JSONModeler\Languages\GO\Types\InterfaceType;
-use DCarbone\JSONModeler\Languages\GO\Types\MapType;
-use DCarbone\JSONModeler\Languages\GO\Types\RawMessageType;
-use DCarbone\JSONModeler\Languages\GO\Types\SimpleType;
-use DCarbone\JSONModeler\Languages\GO\Types\SliceType;
-use DCarbone\JSONModeler\Languages\GO\Types\StructType;
 use DCarbone\JSONModeler\Type;
 use DCarbone\JSONModeler\Writer;
 
@@ -34,15 +28,15 @@ class GOWriter implements Writer {
     }
 
     public function write(Type $type, int $indentLevel = 0): string {
-        if ($type instanceof InterfaceType) {
+        if ($type instanceof Types\InterfaceType) {
             return $this->writeInterface($type, $indentLevel);
-        } else if ($type instanceof MapType) {
+        } else if ($type instanceof Types\MapType) {
             return $this->writeMap($type, $indentLevel);
-        } else if ($type instanceof RawMessageType) {
+        } else if ($type instanceof Types\RawMessageType) {
             return $this->writeRawMessage($type, $indentLevel);
-        } else if ($type instanceof SimpleType) {
+        } else if ($type instanceof Types\SimpleType) {
             return $this->writeSimple($type, $indentLevel);
-        } else if ($type instanceof SliceType) {
+        } else if ($type instanceof Types\SliceType) {
             return $this->writeSlice($type, $indentLevel);
         } else if ($type instanceof Types\StructType) {
             return $this->writeStruct($type, $indentLevel);
@@ -81,13 +75,13 @@ class GOWriter implements Writer {
         $parent = $type->parent();
 
         if ($this->language->configuration()->get(GOConfiguration::KEY_BreakOutInlineStructs)) {
-            if ($mapType instanceof StructType) {
+            if ($mapType instanceof Types\StructType) {
                 $output[] =
                     sprintf('type %s map[string]*%s', $namer->typeMapName($type), $namer->typeName($type));
                 $output[] = $this->write($mapType, $indentLevel);
             } else if (null === $parent) {
                 $output[] = sprintf('type %s map[string]%s', $namer->typeName($type), $this->write($mapType));
-            } else if ($parent instanceof SliceType || $parent instanceof MapType) {
+            } else if ($parent instanceof Types\SliceType || $parent instanceof Types\MapType) {
                 $output[] = sprintf('map[string]%s', $this->write($mapType, $indentLevel));
             } else {
                 $output[] = sprintf('type %s map[string]%s', $namer->typeMapName($type), $this->write($mapType));
@@ -110,7 +104,7 @@ class GOWriter implements Writer {
      * @param int $indentLevel
      * @return string
      */
-    protected function writeRawMessage(RawMessageType $type, int $indentLevel = 0): string {
+    protected function writeRawMessage(Types\RawMessageType $type, int $indentLevel = 0): string {
         /** @var \DCarbone\JSONModeler\Languages\GO\GONamer $namer */
         $namer = $this->language->namer();
         if (null === $type->parent()) {
@@ -129,7 +123,7 @@ class GOWriter implements Writer {
      * @param int $indentLevel
      * @return string
      */
-    protected function writeSimple(SimpleType $type, int $indentLevel = 0): string {
+    protected function writeSimple(Types\SimpleType $type, int $indentLevel = 0): string {
         /** @var \DCarbone\JSONModeler\Languages\GO\GONamer $namer */
         $namer = $this->language->namer();
         if (null === $type->parent()) {
@@ -153,7 +147,7 @@ class GOWriter implements Writer {
      * @param int $indentLevel
      * @return string
      */
-    protected function writeSlice(SliceType $type, int $indentLevel = 0): string {
+    protected function writeSlice(Types\SliceType $type, int $indentLevel = 0): string {
         $output = [];
 
         $sliceType = $type->sliceType();
@@ -163,8 +157,8 @@ class GOWriter implements Writer {
         $namer = $this->language->namer();
 
         if ($this->language->configuration()->get(GOConfiguration::KEY_BreakOutInlineStructs)) {
-            if ($sliceType instanceof StructType) {
-                if ($parent instanceof SliceType) {
+            if ($sliceType instanceof Types\StructType) {
+                if ($parent instanceof Types\SliceType) {
                     $output[] = sprintf('[]*%s', $namer->typeName($sliceType));
                 } else {
                     $output[] =
@@ -174,7 +168,7 @@ class GOWriter implements Writer {
                 $output[] = $this->write($sliceType, $indentLevel);
             } else if (null === $parent) {
                 $output[] = sprintf('type %s []%s', $namer->typeName($type), $this->write($sliceType));
-            } else if ($parent instanceof SliceType || $parent instanceof MapType) {
+            } else if ($parent instanceof Types\SliceType || $parent instanceof Types\MapType) {
                 $output[] = sprintf('[]%s', $this->write($sliceType, $indentLevel));
             } else {
                 $output[] = sprintf('type %s []%s', $namer->typeSliceName($type), $this->write($sliceType));
@@ -197,7 +191,7 @@ class GOWriter implements Writer {
      * @param int $indentLevel
      * @return string
      */
-    protected function writeStruct(StructType $type, int $indentLevel = 0): string {
+    protected function writeStruct(Types\StructType $type, int $indentLevel = 0): string {
         /** @var \DCarbone\JSONModeler\Languages\GO\GONamer $namer */
         $namer = $this->language->namer();
         /** @var \DCarbone\JSONModeler\Languages\GO\GOConfiguration $configuration */
@@ -249,25 +243,25 @@ class GOWriter implements Writer {
                 $fieldTag = sprintf(' `%s`', $fieldTag);
             }
 
-            if ($breakOutInlineStructs && !($field instanceof SimpleType || $field instanceof InterfaceType)) {
+            if ($breakOutInlineStructs && !($field instanceof Types\SimpleType || $field instanceof Types\InterfaceType)) {
                 // Add the child struct to the output list...
                 $output[] = $this->write($field);
 
-                if ($field instanceof StructType) {
+                if ($field instanceof Types\StructType) {
                     $go = sprintf(
                         '%s *%s%s',
                         $go,
                         $namer->typeName($field),
                         $fieldTag
                     );
-                } else if ($field instanceof SliceType) {
+                } else if ($field instanceof Types\SliceType) {
                     $go = sprintf(
                         '%s %s%s',
                         $go,
                         $namer->typeSliceName($field),
                         $fieldTag
                     );
-                } else if ($field instanceof MapType) {
+                } else if ($field instanceof Types\MapType) {
                     $go = sprintf(
                         '%s %s%s',
                         $go,
