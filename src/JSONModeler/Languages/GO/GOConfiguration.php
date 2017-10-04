@@ -60,9 +60,13 @@ class GOConfiguration implements Configuration {
     /**
      * GOConfiguration constructor.
      * @param array $config
+     * @param null|\Psr\Log\LoggerInterface $logger
      */
-    public function __construct(array $config = []) {
-        $this->setLogger(new NullLogger());
+    public function __construct(array $config = [], ?LoggerInterface $logger = null) {
+        if (!$logger) {
+            $logger = new NullLogger();
+        }
+        $this->setLogger($logger);
 
         foreach(static::$defaultValues as $confKey => $defaultValue) {
             $this->options[$confKey] = gettype($defaultValue);

@@ -27,7 +27,7 @@ class GOLanguage implements Language {
     protected $namer;
     /** @var \DCarbone\JSONModeler\Languages\GO\GOTyper */
     protected $typer;
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOParser  */
+    /** @var \DCarbone\JSONModeler\Languages\GO\GOParser */
     protected $parser;
     /** @var \DCarbone\JSONModeler\Languages\GO\GOWriter */
     protected $writer;
@@ -35,16 +35,21 @@ class GOLanguage implements Language {
     /**
      * GOLanguage constructor.
      * @param \DCarbone\JSONModeler\Languages\GO\GOConfiguration $configuration
+     * @param \DCarbone\JSONModeler\Languages\GO\GONamer|null $namer
+     * @param \DCarbone\JSONModeler\Languages\GO\GOTyper|null $typer
+     * @param \DCarbone\JSONModeler\Languages\GO\GOParser|null $parser
+     * @param \DCarbone\JSONModeler\Languages\GO\GOWriter|null $writer
      */
-    public function __construct(GOConfiguration $configuration = null) {
-        if (!$configuration) {
-            $configuration = new GOConfiguration();
-        }
-        $this->configuration = $configuration;
-        $this->namer = new GONamer($this);
-        $this->typer = new GOTyper($this);
-        $this->parser = new GOParser($this);
-        $this->writer = new GOWriter($this);
+    public function __construct(GOConfiguration $configuration = null,
+                                GONamer $namer = null,
+                                GOTyper $typer = null,
+                                GOParser $parser = null,
+                                GOWriter $writer = null) {
+        $this->configuration = $configuration ?? new GOConfiguration();
+        $this->namer = $writer ?? new GONamer($this);
+        $this->typer = $typer ?? new GOTyper($this);
+        $this->parser = $parser ?? new GOParser($this);
+        $this->writer = $writer ?? new GOWriter($this);
     }
 
     /**

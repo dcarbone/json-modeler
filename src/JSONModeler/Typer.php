@@ -13,12 +13,6 @@
  */
 interface Typer {
     /**
-     * Namer constructor.
-     * @param \DCarbone\JSONModeler\Language $language
-     */
-    public function __construct(Language $language);
-
-    /**
      * @param string $name
      * @param $example
      * @param \DCarbone\JSONModeler\TypeParent|null $parent

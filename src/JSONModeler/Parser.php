@@ -13,12 +13,6 @@
  */
 interface Parser {
     /**
-     * Namer constructor.
-     * @param \DCarbone\JSONModeler\Language $language
-     */
-    public function __construct(Language $language);
-
-    /**
      * @param string $name
      * @param mixed $example
      * @param \DCarbone\JSONModeler\TypeParent|null $parent
