@@ -28,6 +28,7 @@ class GOConfiguration implements Configuration {
     const KEY_EmptyStructToInterface = 'emptyStructToInterface';
     const KEY_BreakOutInlineStructs = 'breakOutInlineStructs';
     const KEY_InitialNumberMap = 'initialNumberMap';
+    const KEY_SingleTypeBlock = 'singleTypeBlock';
 
     /** @var array */
     protected static $defaultValues = [
@@ -37,6 +38,7 @@ class GOConfiguration implements Configuration {
         self::KEY_ForceScalarToPointer => false,
         self::KEY_EmptyStructToInterface => false,
         self::KEY_BreakOutInlineStructs => true,
+        self::KEY_SingleTypeBlock => false,
         self::KEY_InitialNumberMap => [
             'Zero_',
             'One_',
