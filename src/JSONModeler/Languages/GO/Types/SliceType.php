@@ -1,7 +1,7 @@
 <?php namespace DCarbone\JSONModeler\Languages\GO\Types;
 
 /*
- * Copyright (C) 2016-2017 Daniel Carbone (daniel.p.carbone@gmail.com)
+ * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -34,12 +34,12 @@ class SliceType extends AbstractType implements TypeParent {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Type $sliceType
+     * @param \DCarbone\JSONModeler\Type $type
      * @return \DCarbone\JSONModeler\Languages\GO\Types\SliceType
      */
-    public function setSliceType(Type $sliceType): SliceType {
-        $sliceType->setParent($this);
-        $this->sliceType = $sliceType;
+    public function setSliceType(Type $type): SliceType {
+        $type->setParent($this);
+        $this->sliceType = $type;
         return $this;
     }
 

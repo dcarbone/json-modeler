@@ -1,4 +1,4 @@
-<?php namespace DCarbone\JSONModeler;
+<?php namespace DCarbone\JSONModeler\Languages\PHP;
 
 /*
  * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,10 +7,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
+use DCarbone\JSONModeler\Writer;
+
 /**
- * Interface TypeParent
- * @package DCarbone\JSONModeler
+ * Class PHPWriter
+ * @package DCarbone\JSONModeler\Languages\PHP
  */
-interface TypeParent extends Type {
+class PHPWriter implements Writer {
 
 }

@@ -1,4 +1,4 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO\Types;
+<?php namespace DCarbone\JSONModeler\Languages\PHP\Types;
 
 /*
  * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -12,7 +12,7 @@ use DCarbone\JSONModeler\TypeParent;
 
 /**
  * Class AbstractType
- * @package DCarbone\JSONModeler\Languages\GO\Types
+ * @package DCarbone\JSONModeler\Languages\PHP\Types
  */
 abstract class AbstractType implements Type {
 
@@ -94,4 +94,19 @@ abstract class AbstractType implements Type {
         $this->parent = $parent;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    abstract public function typehint(): string;
+
+    /**
+     * @return string
+     */
+    abstract public function zero(): string;
+
+    /**
+     * @return string
+     */
+    abstract public function cast(): string;
 }

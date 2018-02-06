@@ -1,13 +1,12 @@
 <?php namespace DCarbone\JSONModeler\Languages\GO;
 
 /*
- * Copyright (C) 2016-2017 Daniel Carbone (daniel.p.carbone@gmail.com)
+ * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Language;
 use DCarbone\JSONModeler\Namer;
 use DCarbone\JSONModeler\Type;
 
@@ -72,14 +71,14 @@ class GONamer implements Namer {
         'Nine_',
     ];
 
-    /** @var \DCarbone\JSONModeler\Language */
+    /** @var \DCarbone\JSONModeler\Languages\GO\GOLanguage */
     protected $language;
 
     /**
      * GONamer constructor.
-     * @param \DCarbone\JSONModeler\Language $language
+     * @param \DCarbone\JSONModeler\Languages\GO\GOLanguage $language
      */
-    public function __construct(Language $language) {
+    public function __construct(GOLanguage $language) {
         $this->language = $language;
     }
 
