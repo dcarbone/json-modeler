@@ -32,7 +32,7 @@ class GOWriter implements Writer {
 
     /**
      * @param \DCarbone\JSONModeler\Type $type
-     * @param int $indentLevel
+     * @param int                        $indentLevel
      * @return string
      */
     public function write(Type $type, int $indentLevel = 0): string {
@@ -72,7 +72,7 @@ class GOWriter implements Writer {
 
     /**
      * @param \DCarbone\JSONModeler\Languages\GO\Types\InterfaceType $type
-     * @param int $indentLevel
+     * @param int                                                    $indentLevel
      * @return string
      */
     protected function writeInterface(Types\InterfaceType $type, int $indentLevel = 0): string {
@@ -90,7 +90,7 @@ class GOWriter implements Writer {
 
     /**
      * @param \DCarbone\JSONModeler\Languages\GO\Types\MapType $type
-     * @param int $indentLevel
+     * @param int                                              $indentLevel
      * @return string
      */
     protected function writeMap(Types\MapType $type, int $indentLevel = 0): string {
@@ -148,7 +148,7 @@ class GOWriter implements Writer {
 
     /**
      * @param \DCarbone\JSONModeler\Languages\GO\Types\RawMessageType $type
-     * @param int $indentLevel
+     * @param int                                                     $indentLevel
      * @return string
      */
     protected function writeRawMessage(Types\RawMessageType $type, int $indentLevel = 0): string {
@@ -167,13 +167,14 @@ class GOWriter implements Writer {
 
     /**
      * @param \DCarbone\JSONModeler\Languages\GO\Types\SimpleType $type
-     * @param int $indentLevel
+     * @param int                                                 $indentLevel
      * @return string
      */
     protected function writeSimple(Types\SimpleType $type, int $indentLevel = 0): string {
         /** @var \DCarbone\JSONModeler\Languages\GO\GONamer $namer */
         $namer = $this->language->namer();
-        if (null === $type->parent()) {
+        $parent = $type->parent();
+        if (null === $parent) {
             if ($this->language->configuration()->get(GOConfiguration::KEY_SingleTypeBlock)) {
                 return sprintf(
                     "\t%s %s%s",
@@ -191,7 +192,14 @@ class GOWriter implements Writer {
             }
         }
 
+        // if scalar pointers are enabled...
         if ($this->language->configuration()->get(GOConfiguration::KEY_ForceScalarToPointer)) {
+            // ...but we have them disabled for slices
+            if (!$this->language->configuration()->get(GOConfiguration::KEY_ScalarPointersInSlices) &&
+                $parent->type() === GOTyper::SLICE) {
+                return $type->type();
+            }
+            // ...otherwise
             return sprintf('*%s', $type->type());
         }
 
@@ -200,7 +208,7 @@ class GOWriter implements Writer {
 
     /**
      * @param \DCarbone\JSONModeler\Languages\GO\Types\SliceType $type
-     * @param int $indentLevel
+     * @param int                                                $indentLevel
      * @return string
      */
     protected function writeSlice(Types\SliceType $type, int $indentLevel = 0): string {
@@ -259,7 +267,7 @@ class GOWriter implements Writer {
 
     /**
      * @param \DCarbone\JSONModeler\Languages\GO\Types\StructType $type
-     * @param int $indentLevel
+     * @param int                                                 $indentLevel
      * @return string
      */
     protected function writeStruct(Types\StructType $type, int $indentLevel = 0): string {
