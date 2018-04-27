@@ -1,7 +1,7 @@
 <?php namespace DCarbone\JSONModeler\Languages\GO;
 
 /*
- * Copyright (C) 2016-2017 Daniel Carbone (daniel.p.carbone@gmail.com)
+ * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -25,6 +25,7 @@ class GOConfiguration implements Configuration {
     const KEY_ForceIntToFloat = 'forceIntToFloat';
     const KEY_UseSimpleInt = 'useSimpleInt';
     const KEY_ForceScalarToPointer = 'forceScalarToPointer';
+    const KEY_ScalarPointersInSlices = 'scalarPointersInSlices';
     const KEY_EmptyStructToInterface = 'emptyStructToInterface';
     const KEY_BreakOutInlineStructs = 'breakOutInlineStructs';
     const KEY_InitialNumberMap = 'initialNumberMap';
@@ -32,14 +33,15 @@ class GOConfiguration implements Configuration {
 
     /** @var array */
     protected static $defaultValues = [
-        self::KEY_ForceOmitEmpty => false,
-        self::KEY_ForceIntToFloat => false,
-        self::KEY_UseSimpleInt => false,
-        self::KEY_ForceScalarToPointer => false,
+        self::KEY_ForceOmitEmpty         => false,
+        self::KEY_ForceIntToFloat        => false,
+        self::KEY_UseSimpleInt           => false,
+        self::KEY_ForceScalarToPointer   => false,
+        self::KEY_ScalarPointersInSlices => false,
         self::KEY_EmptyStructToInterface => false,
-        self::KEY_BreakOutInlineStructs => true,
-        self::KEY_SingleTypeBlock => false,
-        self::KEY_InitialNumberMap => [
+        self::KEY_BreakOutInlineStructs  => true,
+        self::KEY_SingleTypeBlock        => false,
+        self::KEY_InitialNumberMap       => [
             'Zero_',
             'One_',
             'Two_',
@@ -66,7 +68,7 @@ class GOConfiguration implements Configuration {
     public function __construct(array $config = [], ?LoggerInterface $logger = null) {
         $this->setLogger($logger ?? new NullLogger());
 
-        foreach(static::$defaultValues as $confKey => $defaultValue) {
+        foreach (static::$defaultValues as $confKey => $defaultValue) {
             $this->options[$confKey] = gettype($defaultValue);
             if (isset($config[$confKey])) {
                 $this->set($confKey, $config[$confKey]);
@@ -103,7 +105,9 @@ class GOConfiguration implements Configuration {
             if (gettype($value) === $this->options[$key]) {
                 $this->values[$key] = $value;
             } else {
-                throw new \InvalidArgumentException("Key \"{$key}\" must be of type \"{$this->options[$key]}\", \"".gettype($value).'" provided');
+                throw new \InvalidArgumentException("Key \"{$key}\" must be of type \"{$this->options[$key]}\", \"".
+                    gettype($value).
+                    '" provided');
             }
         } else {
             throw new \OutOfBoundsException("No key named \"{$key}\" found in ".get_class($this));
