@@ -88,10 +88,6 @@ class GONamer implements Namer {
      * @return string
      */
     public function format(string $name): string {
-        if (!$name) {
-            return '';
-        }
-
         // If entire name is a number...
         if (preg_match('/^\d+$/S', $name)) {
             $name = sprintf('Num%s', $name);
