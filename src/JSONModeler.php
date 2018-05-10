@@ -1,7 +1,7 @@
 <?php namespace DCarbone;
 
 /*
- * Copyright (C) 2016-2017 Daniel Carbone (daniel.p.carbone@gmail.com)
+ * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -30,8 +30,8 @@ class JSONModeler {
             foreach (glob(__DIR__.'/JSONModeler/Languages/*', GLOB_NOSORT | GLOB_ONLYDIR) as $langDir) {
                 $lang = trim(strrchr($langDir, '/'), "/");
                 if (file_exists(($langFile = "{$langDir}/{$lang}Language.php"))) {
-                    $confClass = __NAMESPACE__.'\\'.__CLASS__."\\Languages\\{$lang}Configuration";
-                    $langClass = __NAMESPACE__.'\\'.__CLASS__."\\Languages\\{$lang}Language";
+                    $confClass = __CLASS__."\\Languages\\{$lang}\\{$lang}Configuration";
+                    $langClass = __CLASS__."\\Languages\\{$lang}\\{$lang}Language";
                     $this->addLanguage(new $langClass(new $confClass));
                 } else {
                     throw new \RuntimeException("You didn't property name the language file for \"{$lang}\", fix it.");
