@@ -19,6 +19,9 @@
         "php": "^7.1",
         "psr/log": "@stable"
     },
+    "require-dev": {
+        "myena/default-logger": "@stable"
+    },
     "autoload": {
         "psr-4": {
             "DCarbone\\": "src/"

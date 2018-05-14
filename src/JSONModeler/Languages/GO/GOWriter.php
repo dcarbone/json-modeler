@@ -238,8 +238,11 @@ class GOWriter implements Writer {
                 if ($singleTypeBlock) {
                     $output[] = sprintf("\t%s []%s", $namer->typeName($type), $this->write($sliceType, $indentLevel));
                 } else {
-                    $output[] =
-                        sprintf('type %s []%s', $namer->typeName($type), $this->write($sliceType, $indentLevel));
+                    $output[] = sprintf(
+                        'type %s []%s',
+                        $namer->typeName($type),
+                        $this->write($sliceType, $indentLevel)
+                    );
                 }
             } else if ($parent instanceof Types\SliceType || $parent instanceof Types\MapType) {
                 $output[] = sprintf('[]%s', $this->write($sliceType, $indentLevel));
@@ -292,25 +295,44 @@ class GOWriter implements Writer {
             $go = sprintf("%s {\n", $type->type());
         }
 
+        $fieldNames = [];
+
         foreach ($type->fields() as $field) {
+            $fieldName = $namer->goName($field);
+
             if ($configuration->isFieldIgnored($type, $field)) {
-                $configuration->logger()->info(sprintf('[json-to-go] Ignoring field "%s" in struct "%s"',
-                    $field->name(),
+                $configuration->logger()->info(sprintf('[go-writer] Ignoring field "%s" in struct "%s"',
+                    $fieldName,
                     $type->name()));
                 continue;
             }
 
-            $configuration->logger()->debug(sprintf('[json-to-go] Writing field "%s" in struct "%s"',
-                $field->name(),
-                $type->name()));
+            if (in_array($fieldName, $fieldNames, true)) {
+                $configuration->logger()->warning(sprintf(
+                    'Field %s is present in struct %s more than once, finding unique name...',
+                    $fieldName,
+                    $type->name()
+                ));
+                for ($i = 0; ; $i++) {
+                    $newName = "{$fieldName}_{$i}";
+                    if (!in_array($newName, $fieldNames, true)) {
+                        $fieldName = $newName;
+                        break;
+                    }
+                }
+            }
 
-            $exported = $configuration->isFieldExported($type, $field);
+            $fieldNames[] = $fieldName;
+
+            $configuration->logger()->debug(sprintf('[go-writer] Writing field "%s" in struct "%s"',
+                $fieldName,
+                $type->name()));
 
             $go = sprintf(
                 '%s%s%s',
                 $go,
                 $this->indents($indentLevel + 1),
-                $exported ? $namer->goName($field) : lcfirst($namer->goName($field))
+                $fieldName
             );
 
             $fieldTag = $configuration->buildFieldTag($type, $field);
