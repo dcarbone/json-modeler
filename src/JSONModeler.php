@@ -30,8 +30,8 @@ class JSONModeler {
             foreach (glob(__DIR__.'/JSONModeler/Languages/*', GLOB_NOSORT | GLOB_ONLYDIR) as $langDir) {
                 $lang = trim(strrchr($langDir, '/'), "/");
                 if (file_exists(($langFile = "{$langDir}/{$lang}Language.php"))) {
-                    $confClass = __NAMESPACE__.'\\'.__CLASS__."\\Languages\\{$lang}Configuration";
-                    $langClass = __NAMESPACE__.'\\'.__CLASS__."\\Languages\\{$lang}Language";
+                    $confClass = __CLASS__."\\Languages\\{$lang}\\{$lang}Configuration";
+                    $langClass = __CLASS__."\\Languages\\{$lang}\\{$lang}Language";
                     $this->addLanguage(new $langClass(new $confClass));
                 } else {
                     throw new \RuntimeException("You didn't property name the language file for \"{$lang}\", fix it.");
