@@ -46,7 +46,7 @@ class StructType extends AbstractType implements TypeParent {
      */
     public function addChild(Type $child): StructType {
         $child->setParent($this);
-        $this->fields[$child->name()] = $child;
+        $this->fields[] = $child;
         return $this;
     }
 

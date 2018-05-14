@@ -126,15 +126,6 @@ class GOConfiguration implements Configuration {
      * @param \DCarbone\JSONModeler\Type $field
      * @return bool
      */
-    public function isFieldExported(Types\StructType $struct, Type $field): bool {
-        return true;
-    }
-
-    /**
-     * @param \DCarbone\JSONModeler\Languages\GO\Types\StructType $struct
-     * @param \DCarbone\JSONModeler\Type $field
-     * @return bool
-     */
     public function isFieldIgnored(Types\StructType $struct, Type $field): bool {
         return false;
     }
