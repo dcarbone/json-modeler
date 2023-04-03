@@ -1,7 +1,7 @@
 <?php namespace DCarbone\JSONModeler\Languages\GO;
 
 /*
- * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
+ * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -56,9 +56,9 @@ class GOConfiguration implements Configuration {
     ];
 
     /** @var array */
-    protected $options = [];
+    protected array $options = [];
     /** @var array */
-    protected $values = [];
+    protected array $values = [];
 
     /**
      * GOConfiguration constructor.
@@ -89,7 +89,7 @@ class GOConfiguration implements Configuration {
      * @param string $key
      * @return mixed
      */
-    public function get(string $key) {
+    public function get(string $key): mixed {
         if (isset($this->options[$key])) {
             return $this->values[$key];
         }
@@ -100,7 +100,7 @@ class GOConfiguration implements Configuration {
      * @param string $key
      * @param mixed $value
      */
-    public function set(string $key, $value): void {
+    public function set(string $key, mixed $value): void {
         if (isset($this->options[$key])) {
             if (gettype($value) === $this->options[$key]) {
                 $this->values[$key] = $value;

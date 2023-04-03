@@ -1,7 +1,7 @@
 <?php namespace DCarbone\JSONModeler;
 
 /*
- * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
+ * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -18,5 +18,5 @@ interface Parser {
      * @param \DCarbone\JSONModeler\TypeParent|null $parent
      * @return \DCarbone\JSONModeler\Type
      */
-    public function parse(string $name, $example, ?TypeParent $parent = null): Type;
+    public function parse(string $name, mixed $example, ?TypeParent $parent = null): Type;
 }

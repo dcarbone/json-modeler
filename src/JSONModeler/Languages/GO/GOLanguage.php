@@ -1,7 +1,7 @@
 <?php namespace DCarbone\JSONModeler\Languages\GO;
 
 /*
- * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
+ * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -22,19 +22,19 @@ class GOLanguage implements Language {
     const NAME = 'golang';
 
     /** @var \DCarbone\JSONModeler\Languages\GO\GOConfiguration */
-    protected $configuration;
+    protected GOConfiguration $configuration;
     /** @var \DCarbone\JSONModeler\Languages\GO\GONamer */
-    protected $namer;
+    protected GONamer $namer;
     /** @var \DCarbone\JSONModeler\Languages\GO\GOTyper */
-    protected $typer;
+    protected GOTyper $typer;
     /** @var \DCarbone\JSONModeler\Languages\GO\GOParser */
-    protected $parser;
+    protected GOParser $parser;
     /** @var \DCarbone\JSONModeler\Languages\GO\GOWriter */
-    protected $writer;
+    protected GOWriter $writer;
 
     /**
      * GOLanguage constructor.
-     * @param \DCarbone\JSONModeler\Languages\GO\GOConfiguration $configuration
+     * @param \DCarbone\JSONModeler\Languages\GO\GOConfiguration|null $configuration
      * @param \DCarbone\JSONModeler\Languages\GO\GONamer|null $namer
      * @param \DCarbone\JSONModeler\Languages\GO\GOTyper|null $typer
      * @param \DCarbone\JSONModeler\Languages\GO\GOParser|null $parser

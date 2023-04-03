@@ -1,7 +1,7 @@
 <?php namespace DCarbone;
 
 /*
- * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
+ * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -19,7 +19,7 @@ class JSONModeler {
     const TYPE_NAME_REGEX = '^[a-zA-Z][a-zA-Z0-9]*$';
 
     /** @var \DCarbone\JSONModeler\Language[] */
-    protected $languages = [];
+    protected array $languages = [];
 
     /**
      * JSONModeler constructor.
@@ -67,7 +67,7 @@ class JSONModeler {
      * @param string $language
      * @return \DCarbone\JSONModeler\Type
      */
-    public function parseDecoded(string $typeName, $decodedInput, string $language): Type {
+    public function parseDecoded(string $typeName, mixed $decodedInput, string $language): Type {
         $encoded = @json_encode($decodedInput);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new \RuntimeException('Unable to json_encode input: '.json_last_error_msg());
@@ -126,10 +126,10 @@ class JSONModeler {
     }
 
     /**
-     * @param $typeExample
+     * @param mixed $typeExample
      * @return array|bool|float|int|null|string
      */
-    protected function sanitizeInput($typeExample) {
+    protected function sanitizeInput(mixed $typeExample) {
         switch (gettype($typeExample)) {
             case 'string':
                 return 'string';
@@ -207,7 +207,7 @@ class JSONModeler {
 
     /**
      * @param array $examples
-     * @return \stdClass
+     * @return \stdClass|null
      */
     protected function combineObjects(array $examples): ?\stdClass {
         $type = new \stdClass();

@@ -1,13 +1,12 @@
 <?php namespace DCarbone\JSONModeler\Languages\GO;
 
 /*
- * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
+ * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Language;
 use DCarbone\JSONModeler\Namer;
 use DCarbone\JSONModeler\Type;
 
@@ -59,7 +58,7 @@ class GONamer implements Namer {
      * Map of integer => valid starting character
      * @var array
      */
-    protected static $numberToWord = [
+    protected static array $numberToWord = [
         'Zero_',
         'One_',
         'Two_',
@@ -72,14 +71,14 @@ class GONamer implements Namer {
         'Nine_',
     ];
 
-    /** @var \DCarbone\JSONModeler\Language */
-    protected $language;
+    /** @var \DCarbone\JSONModeler\Languages\GO\GOLanguage */
+    protected GOLanguage $language;
 
     /**
      * GONamer constructor.
-     * @param \DCarbone\JSONModeler\Language $language
+     * @param \DCarbone\JSONModeler\Languages\GO\GOLanguage $language
      */
-    public function __construct(Language $language) {
+    public function __construct(GOLanguage $language) {
         $this->language = $language;
     }
 
@@ -159,13 +158,12 @@ class GONamer implements Namer {
      * @return string
      */
     protected function special(string $string): string {
-        $ci = static::COMMON_INITIALISISMS;
         return preg_replace_callback('/(^|[^a-zA-Z])([a-z]+)/S',
-            function ($item) use ($ci) {
+            function ($item) {
                 [$full, $symbol, $string] = $item;
                 $upper = strtoupper($string);
 
-                if (in_array($upper, $ci, true)) {
+                if (in_array($upper, static::COMMON_INITIALISISMS, true)) {
                     return $upper;
                 }
                 return ucfirst(strtolower($string));
@@ -178,12 +176,11 @@ class GONamer implements Namer {
      * @return string
      */
     protected function case(string $string): string {
-        $ci = static::COMMON_INITIALISISMS;
         return preg_replace_callback('/([A-Z])([a-z]+)/S',
-            function ($item) use ($ci) {
+            function ($item) {
                 [$full] = $item;
                 $upper = strtoupper($full);
-                if (in_array($upper, $ci, true)) {
+                if (in_array($upper, static::COMMON_INITIALISISMS, true)) {
                     return $upper;
                 }
                 return $full;

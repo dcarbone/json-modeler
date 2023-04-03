@@ -1,7 +1,7 @@
 <?php namespace DCarbone\JSONModeler;
 
 /*
- * Copyright (C) 2016-2018 Daniel Carbone (daniel.p.carbone@gmail.com)
+ * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -32,7 +32,7 @@ interface Configuration extends LoggerAwareInterface {
      * @param string $key
      * @return mixed
      */
-    public function get(string $key);
+    public function get(string $key): mixed;
 
     /**
      * Must apply value to key, or fail in some way if key / valid is invalid.
@@ -41,7 +41,7 @@ interface Configuration extends LoggerAwareInterface {
      * @param mixed $value
      * @return void
      */
-    public function set(string $key, $value): void;
+    public function set(string $key, mixed $value): void;
 
     /**
      * Must return a usable logger instance
