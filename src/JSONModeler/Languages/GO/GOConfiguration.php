@@ -32,7 +32,7 @@ class GOConfiguration implements Configuration {
     const KEY_SingleTypeBlock = 'singleTypeBlock';
 
     /** @var array */
-    protected static $defaultValues = [
+    protected static array $defaultValues = [
         self::KEY_ForceOmitEmpty         => false,
         self::KEY_ForceIntToFloat        => false,
         self::KEY_UseSimpleInt           => false,
