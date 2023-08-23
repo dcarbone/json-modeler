@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,13 +11,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Language;
-use DCarbone\JSONModeler\TypeParent;
-use DCarbone\JSONModeler\Typer;
+use DCarbone\Modeler9000\TypeParent;
+use DCarbone\Modeler9000\Typer;
 
 /**
  * Class GOTyper
- * @package DCarbone\JSONModeler\Languages\GO
+ * @package DCarbone\Modeler9000\Languages\GO
  */
 class GOTyper implements Typer {
 
@@ -30,12 +33,12 @@ class GOTyper implements Typer {
     const INTERFACE = 'interface{}';
     const RAWMESSAGE = 'raw';
 
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOLanguage */
+    /** @var \DCarbone\Modeler9000\Languages\GO\GOLanguage */
     protected GOLanguage $language;
 
     /**
      * GOTyper constructor.
-     * @param \DCarbone\JSONModeler\Languages\GO\GOLanguage $language
+     * @param \DCarbone\Modeler9000\Languages\GO\GOLanguage $language
      */
     public function __construct(GOLanguage $language) {
         $this->language = $language;
@@ -44,7 +47,7 @@ class GOTyper implements Typer {
     /**
      * @param string $name
      * @param mixed $example
-     * @param \DCarbone\JSONModeler\TypeParent|null $parent
+     * @param \DCarbone\Modeler9000\TypeParent|null $parent
      * @return string
      */
     public function type(string $name, mixed $example, TypeParent $parent = null): string {

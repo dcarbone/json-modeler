@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -9,13 +13,13 @@
 
 /**
  * Interface Typer
- * @package DCarbone\JSONModeler
+ * @package DCarbone\Modeler9000
  */
 interface Typer {
     /**
      * @param string $name
      * @param mixed $example
-     * @param \DCarbone\JSONModeler\TypeParent|null $parent
+     * @param \DCarbone\Modeler9000\TypeParent|null $parent
      * @return string
      */
     public function type(string $name, mixed $example, TypeParent $parent = null): string;

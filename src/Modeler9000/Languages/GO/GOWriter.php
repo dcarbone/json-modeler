@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,16 +11,16 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Language;
-use DCarbone\JSONModeler\Type;
-use DCarbone\JSONModeler\Writer;
+use DCarbone\Modeler9000\Language;
+use DCarbone\Modeler9000\Type;
+use DCarbone\Modeler9000\Writer;
 
 /**
  * Class GOWriter
- * @package DCarbone\JSONModeler\Languages\GO
+ * @package DCarbone\Modeler9000\Languages\GO
  */
 class GOWriter implements Writer {
-    /** @var \DCarbone\JSONModeler\Language */
+    /** @var \DCarbone\Modeler9000\Language */
     protected Language $language;
 
     /** @var bool */
@@ -24,14 +28,14 @@ class GOWriter implements Writer {
 
     /**
      * GOWriter constructor.
-     * @param \DCarbone\JSONModeler\Language $language
+     * @param \DCarbone\Modeler9000\Language $language
      */
     public function __construct(Language $language) {
         $this->language = $language;
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Type $type
+     * @param \DCarbone\Modeler9000\Type $type
      * @param int                        $indentLevel
      * @return string
      */
@@ -71,12 +75,12 @@ class GOWriter implements Writer {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Languages\GO\Types\InterfaceType $type
+     * @param \DCarbone\Modeler9000\Languages\GO\Types\InterfaceType $type
      * @param int                                                    $indentLevel
      * @return string
      */
     protected function writeInterface(Types\InterfaceType $type, int $indentLevel = 0): string {
-        /** @var \DCarbone\JSONModeler\Languages\GO\GONamer $namer */
+        /** @var \DCarbone\Modeler9000\Languages\GO\GONamer $namer */
         $namer = $this->language->namer();
         if (null === $type->parent()) {
             if ($this->language->configuration()->get(GOConfiguration::KEY_SingleTypeBlock)) {
@@ -89,12 +93,12 @@ class GOWriter implements Writer {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Languages\GO\Types\MapType $type
+     * @param \DCarbone\Modeler9000\Languages\GO\Types\MapType $type
      * @param int                                              $indentLevel
      * @return string
      */
     protected function writeMap(Types\MapType $type, int $indentLevel = 0): string {
-        /** @var \DCarbone\JSONModeler\Languages\GO\GONamer $namer */
+        /** @var \DCarbone\Modeler9000\Languages\GO\GONamer $namer */
         $namer = $this->language->namer();
 
         $output = [];
@@ -147,12 +151,12 @@ class GOWriter implements Writer {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Languages\GO\Types\RawMessageType $type
+     * @param \DCarbone\Modeler9000\Languages\GO\Types\RawMessageType $type
      * @param int                                                     $indentLevel
      * @return string
      */
     protected function writeRawMessage(Types\RawMessageType $type, int $indentLevel = 0): string {
-        /** @var \DCarbone\JSONModeler\Languages\GO\GONamer $namer */
+        /** @var \DCarbone\Modeler9000\Languages\GO\GONamer $namer */
         $namer = $this->language->namer();
         if (null === $type->parent()) {
             if ($this->language->configuration()->get(GOConfiguration::KEY_SingleTypeBlock)) {
@@ -166,12 +170,12 @@ class GOWriter implements Writer {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Languages\GO\Types\SimpleType $type
+     * @param \DCarbone\Modeler9000\Languages\GO\Types\SimpleType $type
      * @param int                                                 $indentLevel
      * @return string
      */
     protected function writeSimple(Types\SimpleType $type, int $indentLevel = 0): string {
-        /** @var \DCarbone\JSONModeler\Languages\GO\GONamer $namer */
+        /** @var \DCarbone\Modeler9000\Languages\GO\GONamer $namer */
         $namer = $this->language->namer();
         $parent = $type->parent();
         if (null === $parent) {
@@ -207,7 +211,7 @@ class GOWriter implements Writer {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Languages\GO\Types\SliceType $type
+     * @param \DCarbone\Modeler9000\Languages\GO\Types\SliceType $type
      * @param int                                                $indentLevel
      * @return string
      */
@@ -218,7 +222,7 @@ class GOWriter implements Writer {
         $parent = $type->parent();
         $singleTypeBlock = $this->language->configuration()->get(GOConfiguration::KEY_SingleTypeBlock);
 
-        /** @var \DCarbone\JSONModeler\Languages\GO\GONamer $namer */
+        /** @var \DCarbone\Modeler9000\Languages\GO\GONamer $namer */
         $namer = $this->language->namer();
 
         if ($this->language->configuration()->get(GOConfiguration::KEY_BreakOutInlineStructs)) {
@@ -269,14 +273,14 @@ class GOWriter implements Writer {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Languages\GO\Types\StructType $type
+     * @param \DCarbone\Modeler9000\Languages\GO\Types\StructType $type
      * @param int                                                 $indentLevel
      * @return string
      */
     protected function writeStruct(Types\StructType $type, int $indentLevel = 0): string {
-        /** @var \DCarbone\JSONModeler\Languages\GO\GONamer $namer */
+        /** @var \DCarbone\Modeler9000\Languages\GO\GONamer $namer */
         $namer = $this->language->namer();
-        /** @var \DCarbone\JSONModeler\Languages\GO\GOConfiguration $configuration */
+        /** @var \DCarbone\Modeler9000\Languages\GO\GOConfiguration $configuration */
         $configuration = $this->language->configuration();
 
         $output = [];

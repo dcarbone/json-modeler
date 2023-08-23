@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -9,7 +13,7 @@
 
 /**
  * Interface TypeParent
- * @package DCarbone\JSONModeler
+ * @package DCarbone\Modeler9000
  */
 interface TypeParent extends Type {
 

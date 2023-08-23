@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO\Types;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO\Types;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -9,7 +13,7 @@
 
 /**
  * Class SimpleType
- * @package DCarbone\JSONModeler\Languages\GO\Types
+ * @package DCarbone\Modeler9000\Languages\GO\Types
  */
 class SimpleType extends AbstractType {
     /** @var string */

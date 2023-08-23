@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO\Types;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO\Types;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,31 +11,31 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Type;
-use DCarbone\JSONModeler\TypeParent;
+use DCarbone\Modeler9000\Type;
+use DCarbone\Modeler9000\TypeParent;
 
 /**
  * Class AbstractType
- * @package DCarbone\JSONModeler\Languages\GO\Types
+ * @package DCarbone\Modeler9000\Languages\GO\Types
  */
 abstract class AbstractType implements Type {
 
     /** @var string */
-    protected $name;
+    protected string $name;
     /** @var mixed */
-    protected $example;
+    protected mixed $example;
 
     /** @var bool */
-    protected $alwaysDefined = true;
+    protected bool $alwaysDefined = true;
 
-    /** @var \DCarbone\JSONModeler\TypeParent|null */
-    protected $parent = null;
+    /** @var \DCarbone\Modeler9000\TypeParent|null */
+    protected TypeParent|null $parent = null;
 
     /**
      * AbstractType constructor.
      * @param string $name
      * @param $example
-     * @param \DCarbone\JSONModeler\TypeParent|null $parent
+     * @param \DCarbone\Modeler9000\TypeParent|null $parent
      */
     public function __construct(string $name, $example, ?TypeParent $parent = null) {
         $this->name = $name;
@@ -72,7 +76,7 @@ abstract class AbstractType implements Type {
     }
 
     /**
-     * @return \DCarbone\JSONModeler\Type
+     * @return \DCarbone\Modeler9000\Type
      */
     public function notAlwaysDefined(): Type {
         $this->alwaysDefined = false;
@@ -80,15 +84,15 @@ abstract class AbstractType implements Type {
     }
 
     /**
-     * @return \DCarbone\JSONModeler\TypeParent|null
+     * @return \DCarbone\Modeler9000\TypeParent|null
      */
     public function parent(): ?TypeParent {
         return $this->parent;
     }
 
     /**
-     * @param \DCarbone\JSONModeler\TypeParent $parent
-     * @return \DCarbone\JSONModeler\Type
+     * @param \DCarbone\Modeler9000\TypeParent $parent
+     * @return \DCarbone\Modeler9000\Type
      */
     public function setParent(TypeParent $parent): Type {
         $this->parent = $parent;

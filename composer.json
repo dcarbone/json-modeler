@@ -1,7 +1,7 @@
 {
-    "name": "dcarbone/json-modeler",
+    "name": "dcarbone/modeler9000",
     "type": "library",
-    "description": "Utility for converting JSON into language-specific models",
+    "description": "Utility for converting JSON or YAML into language-specific models",
     "license": "MIT",
     "keywords": [
         "json",
@@ -16,8 +16,9 @@
         }
     ],
     "require": {
-        "php": ">=8.1",
-        "psr/log": "@stable"
+        "php": ">=8.2",
+        "psr/log": "@stable",
+        "ext-yaml": "*"
     },
     "require-dev": {
         "myena/default-logger": "@stable"

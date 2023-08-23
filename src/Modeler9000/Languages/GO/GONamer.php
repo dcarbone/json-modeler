@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,12 +11,12 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Namer;
-use DCarbone\JSONModeler\Type;
+use DCarbone\Modeler9000\Namer;
+use DCarbone\Modeler9000\Type;
 
 /**
  * Class GONamer
- * @package DCarbone\JSONModeler\Languages\GO
+ * @package DCarbone\Modeler9000\Languages\GO
  */
 class GONamer implements Namer {
 
@@ -71,12 +75,12 @@ class GONamer implements Namer {
         'Nine_',
     ];
 
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOLanguage */
+    /** @var \DCarbone\Modeler9000\Languages\GO\GOLanguage */
     protected GOLanguage $language;
 
     /**
      * GONamer constructor.
-     * @param \DCarbone\JSONModeler\Languages\GO\GOLanguage $language
+     * @param \DCarbone\Modeler9000\Languages\GO\GOLanguage $language
      */
     public function __construct(GOLanguage $language) {
         $this->language = $language;
@@ -111,7 +115,7 @@ class GONamer implements Namer {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Type $type
+     * @param \DCarbone\Modeler9000\Type $type
      * @return string
      */
     public function goName(Type $type): string {
@@ -122,7 +126,7 @@ class GONamer implements Namer {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Type $type
+     * @param \DCarbone\Modeler9000\Type $type
      * @return string
      */
     public function typeName(Type $type): string {
@@ -138,7 +142,7 @@ class GONamer implements Namer {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Type $type
+     * @param \DCarbone\Modeler9000\Type $type
      * @return string
      */
     public function typeMapName(Type $type): string {
@@ -146,7 +150,7 @@ class GONamer implements Namer {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Type $type
+     * @param \DCarbone\Modeler9000\Type $type
      * @return string
      */
     public function typeSliceName(Type $type): string {

@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO\Types;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO\Types;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,16 +11,16 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Languages\GO\GOTyper;
-use DCarbone\JSONModeler\Type;
-use DCarbone\JSONModeler\TypeParent;
+use DCarbone\Modeler9000\Languages\GO\GOTyper;
+use DCarbone\Modeler9000\Type;
+use DCarbone\Modeler9000\TypeParent;
 
 /**
  * Class SliceType
- * @package DCarbone\JSONModeler\Languages\GO\Types
+ * @package DCarbone\Modeler9000\Languages\GO\Types
  */
 class SliceType extends AbstractType implements TypeParent {
-    /** @var \DCarbone\JSONModeler\Type|null */
+    /** @var \DCarbone\Modeler9000\Type|null */
     protected ?Type $sliceType = null;
 
     /**
@@ -34,8 +38,8 @@ class SliceType extends AbstractType implements TypeParent {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Type $type
-     * @return \DCarbone\JSONModeler\Languages\GO\Types\SliceType
+     * @param \DCarbone\Modeler9000\Type $type
+     * @return \DCarbone\Modeler9000\Languages\GO\Types\SliceType
      */
     public function setSliceType(Type $type): SliceType {
         $type->setParent($this);
@@ -44,7 +48,7 @@ class SliceType extends AbstractType implements TypeParent {
     }
 
     /**
-     * @return \DCarbone\JSONModeler\Type
+     * @return \DCarbone\Modeler9000\Type
      */
     public function sliceType(): Type {
         return $this->sliceType;

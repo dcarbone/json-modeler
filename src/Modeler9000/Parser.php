@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -9,14 +13,14 @@
 
 /**
  * Interface Parser
- * @package DCarbone\JSONModeler
+ * @package DCarbone\Modeler9000
  */
 interface Parser {
     /**
      * @param string $name
      * @param mixed $example
-     * @param \DCarbone\JSONModeler\TypeParent|null $parent
-     * @return \DCarbone\JSONModeler\Type
+     * @param \DCarbone\Modeler9000\TypeParent|null $parent
+     * @return \DCarbone\Modeler9000\Type
      */
     public function parse(string $name, mixed $example, ?TypeParent $parent = null): Type;
 }

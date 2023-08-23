@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -9,7 +13,7 @@
 
 /**
  * Interface Language
- * @package DCarbone\JSONModeler
+ * @package DCarbone\Modeler9000
  */
 interface Language {
     /**
@@ -18,27 +22,27 @@ interface Language {
     public function name(): string;
 
     /**
-     * @return \DCarbone\JSONModeler\Configuration
+     * @return \DCarbone\Modeler9000\Configuration
      */
     public function configuration(): Configuration;
 
     /**
-     * @return \DCarbone\JSONModeler\Namer
+     * @return \DCarbone\Modeler9000\Namer
      */
     public function namer(): Namer;
 
     /**
-     * @return \DCarbone\JSONModeler\Parser
+     * @return \DCarbone\Modeler9000\Parser
      */
     public function parser(): Parser;
 
     /**
-     * @return \DCarbone\JSONModeler\Typer
+     * @return \DCarbone\Modeler9000\Typer
      */
     public function typer(): Typer;
 
     /**
-     * @return \DCarbone\JSONModeler\Writer
+     * @return \DCarbone\Modeler9000\Writer
      */
     public function writer(): Writer;
 }

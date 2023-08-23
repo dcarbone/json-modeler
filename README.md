@@ -15,13 +15,13 @@ Utility for converting JSON into language-specific models
 
 ```php
 // Initialize Langauges
-$goConf = new \DCarbone\JSONModeler\Languages\GO\GOConfiguration([
+$goConf = new \DCarbone\Modeler9000\Languages\GO\GOConfiguration([
     // @see ./src/JONSModeler/Langauges/GO/GOConfiguration.php for options
 ]);
-$go = new \DCarbone\JSONModeler\Languages\GO\GOLanguage();
+$go = new \DCarbone\Modeler9000\Languages\GO\GOLanguage();
 
 // Create Modeler instance
-$modeler = new \DCarbone\JSONModeler([$go]);
+$modeler = new \DCarbone\Modeler9000([$go]);
 
 // Get some JSON
 $json = <<<STRING

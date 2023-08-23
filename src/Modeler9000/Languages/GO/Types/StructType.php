@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO\Types;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO\Types;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,16 +11,16 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Languages\GO\GOTyper;
-use DCarbone\JSONModeler\Type;
-use DCarbone\JSONModeler\TypeParent;
+use DCarbone\Modeler9000\Languages\GO\GOTyper;
+use DCarbone\Modeler9000\Type;
+use DCarbone\Modeler9000\TypeParent;
 
 /**
  * Class StructType
- * @package DCarbone\JSONModeler\Languages\GO\Types
+ * @package DCarbone\Modeler9000\Languages\GO\Types
  */
 class StructType extends AbstractType implements TypeParent {
-    /** @var \DCarbone\JSONModeler\Type[] */
+    /** @var \DCarbone\Modeler9000\Type[] */
     protected array $fields = [];
 
     /**
@@ -34,15 +38,15 @@ class StructType extends AbstractType implements TypeParent {
     }
 
     /**
-     * @return \DCarbone\JSONModeler\Type[]
+     * @return \DCarbone\Modeler9000\Type[]
      */
     public function fields(): array {
         return $this->fields;
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Type $child
-     * @return \DCarbone\JSONModeler\Languages\GO\Types\StructType
+     * @param \DCarbone\Modeler9000\Type $child
+     * @return \DCarbone\Modeler9000\Languages\GO\Types\StructType
      */
     public function addChild(Type $child): StructType {
         $child->setParent($this);

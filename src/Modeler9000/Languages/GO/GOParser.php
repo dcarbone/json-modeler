@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,21 +11,21 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Parser;
-use DCarbone\JSONModeler\Type;
-use DCarbone\JSONModeler\TypeParent;
+use DCarbone\Modeler9000\Parser;
+use DCarbone\Modeler9000\Type;
+use DCarbone\Modeler9000\TypeParent;
 
 /**
  * Class GOParser
- * @package DCarbone\JSONModeler\Languages\GO
+ * @package DCarbone\Modeler9000\Languages\GO
  */
 class GOParser implements Parser {
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOLanguage */
+    /** @var \DCarbone\Modeler9000\Languages\GO\GOLanguage */
     protected GOLanguage $language;
 
     /**
      * GOParser constructor.
-     * @param \DCarbone\JSONModeler\Languages\GO\GOLanguage $language
+     * @param \DCarbone\Modeler9000\Languages\GO\GOLanguage $language
      */
     public function __construct(GOLanguage $language) {
         $this->language = $language;
@@ -30,8 +34,8 @@ class GOParser implements Parser {
     /**
      * @param string $name
      * @param $example
-     * @param \DCarbone\JSONModeler\TypeParent|null $parent
-     * @return \DCarbone\JSONModeler\Type
+     * @param \DCarbone\Modeler9000\TypeParent|null $parent
+     * @return \DCarbone\Modeler9000\Type
      */
     public function parse(string $name, $example, ?TypeParent $parent = null): Type {
         $goType = $this->language->typer()->type($name, $example, $parent);
@@ -60,8 +64,8 @@ class GOParser implements Parser {
     /**
      * @param string $name
      * @param \stdClass $example
-     * @param \DCarbone\JSONModeler\TypeParent|null $parent
-     * @return \DCarbone\JSONModeler\Languages\GO\Types\MapType
+     * @param \DCarbone\Modeler9000\TypeParent|null $parent
+     * @return \DCarbone\Modeler9000\Languages\GO\Types\MapType
      */
     protected function parseMap(string $name, \stdClass $example, ?TypeParent $parent = null): Types\MapType {
         $mapType = new Types\MapType($name, $example, $parent);
@@ -97,8 +101,8 @@ class GOParser implements Parser {
     /**
      * @param string $name
      * @param \stdClass $example
-     * @param \DCarbone\JSONModeler\TypeParent|null $parent
-     * @return \DCarbone\JSONModeler\Languages\GO\Types\StructType
+     * @param \DCarbone\Modeler9000\TypeParent|null $parent
+     * @return \DCarbone\Modeler9000\Languages\GO\Types\StructType
      */
     protected function parseStruct(string $name, \stdClass $example, ?TypeParent $parent = null): Types\StructType {
         $structType = new Types\StructType($name, $example, $parent);
@@ -111,8 +115,8 @@ class GOParser implements Parser {
     /**
      * @param string $name
      * @param array $example
-     * @param \DCarbone\JSONModeler\TypeParent|null $parent
-     * @return \DCarbone\JSONModeler\Languages\GO\Types\SliceType
+     * @param \DCarbone\Modeler9000\TypeParent|null $parent
+     * @return \DCarbone\Modeler9000\Languages\GO\Types\SliceType
      */
     protected function parseSlice(string $name, array $example, ?TypeParent $parent = null): Types\SliceType {
         $sliceType = new Types\SliceType($name, $example, $parent);

@@ -1,4 +1,8 @@
-<?php namespace DCarbone;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,18 +11,18 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Language;
-use DCarbone\JSONModeler\Type;
+use DCarbone\Modeler9000\Language;
+use DCarbone\Modeler9000\Type;
 
 /**
  * Class JSONModeler
  * @package DCarbone
  */
-class JSONModeler {
+class Modeler9000 {
 
     const TYPE_NAME_REGEX = '^[a-zA-Z][a-zA-Z0-9]*$';
 
-    /** @var \DCarbone\JSONModeler\Language[] */
+    /** @var \DCarbone\Modeler9000\Language[] */
     protected array $languages = [];
 
     /**
@@ -27,7 +31,7 @@ class JSONModeler {
      */
     public function __construct(array $languages = []) {
         if (count($languages) === 0) {
-            foreach (glob(__DIR__.'/JSONModeler/Languages/*', GLOB_NOSORT | GLOB_ONLYDIR) as $langDir) {
+            foreach (glob(__DIR__ . '/Modeler9000/Languages/*', GLOB_NOSORT | GLOB_ONLYDIR) as $langDir) {
                 $lang = trim(strrchr($langDir, '/'), "/");
                 if (file_exists(($langFile = "{$langDir}/{$lang}Language.php"))) {
                     $confClass = __CLASS__."\\Languages\\{$lang}\\{$lang}Configuration";
@@ -46,16 +50,16 @@ class JSONModeler {
 
     /**
      * @param string $name
-     * @return \DCarbone\JSONModeler\Language|null
+     * @return \DCarbone\Modeler9000\Language|null
      */
     public function language(string $name): ?Language {
         return $this->languages[$name] ?? null;
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Language $language
+     * @param \DCarbone\Modeler9000\Language $language
      */
-    public function addLanguage(Language $language) {
+    public function addLanguage(Language $language): void {
         $this->languages[$language->name()] = $language;
     }
 
@@ -65,7 +69,7 @@ class JSONModeler {
      * @param string $typeName
      * @param mixed $decodedInput
      * @param string $language
-     * @return \DCarbone\JSONModeler\Type
+     * @return \DCarbone\Modeler9000\Type
      */
     public function parseDecoded(string $typeName, mixed $decodedInput, string $language): Type {
         $encoded = @json_encode($decodedInput);
@@ -76,10 +80,12 @@ class JSONModeler {
     }
 
     /**
+     * Parses a JSON input string
+     *
      * @param string $typeName
      * @param string $input
      * @param string $language
-     * @return \DCarbone\JSONModeler\Type
+     * @return \DCarbone\Modeler9000\Type
      */
     public function parse(string $typeName, string $input, string $language): Type {
         $lang = $this->language($language);
@@ -112,6 +118,8 @@ class JSONModeler {
     }
 
     /**
+     * Generates model(s) from provided JSON string
+     *
      * @param string $typeName
      * @param string $input
      * @param string $language
@@ -126,10 +134,36 @@ class JSONModeler {
     }
 
     /**
+     * Parses provided yaml string
+     *
+     * @param string $typeName
+     * @param string $input
+     * @param string $language
+     * @return \DCarbone\Modeler9000\Type
+     */
+    public function parseYAML(string $typeName, string $input, string $language): Type {
+        $decoded = yaml_parse($input);
+        return $this->parse($typeName, json_encode($decoded), $language);
+    }
+
+    /**
+     * Generates model(s) from provided yaml string
+     *
+     * @param string $typeName
+     * @param string $input
+     * @param string $language
+     * @return string
+     */
+    public function generateFromYAML(string $typeName, string $input, string $language): string {
+        $decoded = yaml_parse($input);
+        return $this->generate($typeName, json_encode($decoded), $language);
+    }
+
+    /**
      * @param mixed $typeExample
      * @return array|bool|float|int|null|string
      */
-    protected function sanitizeInput(mixed $typeExample) {
+    protected function sanitizeInput(mixed $typeExample): array|bool|float|int|null|string {
         switch (gettype($typeExample)) {
             case 'string':
                 return 'string';

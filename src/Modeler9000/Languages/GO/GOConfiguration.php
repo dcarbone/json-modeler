@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,15 +11,15 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Configuration;
-use DCarbone\JSONModeler\Type;
+use DCarbone\Modeler9000\Configuration;
+use DCarbone\Modeler9000\Type;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 /**
  * Class GOConfiguration
- * @package DCarbone\JSONModeler\Languages\GO
+ * @package DCarbone\Modeler9000\Languages\GO
  */
 class GOConfiguration implements Configuration {
 
@@ -122,8 +126,8 @@ class GOConfiguration implements Configuration {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Languages\GO\Types\StructType $struct
-     * @param \DCarbone\JSONModeler\Type $field
+     * @param \DCarbone\Modeler9000\Languages\GO\Types\StructType $struct
+     * @param \DCarbone\Modeler9000\Type $field
      * @return bool
      */
     public function isFieldIgnored(Types\StructType $struct, Type $field): bool {
@@ -131,8 +135,8 @@ class GOConfiguration implements Configuration {
     }
 
     /**
-     * @param \DCarbone\JSONModeler\Languages\GO\Types\StructType $struct
-     * @param \DCarbone\JSONModeler\Type $field
+     * @param \DCarbone\Modeler9000\Languages\GO\Types\StructType $struct
+     * @param \DCarbone\Modeler9000\Type $field
      * @return string
      */
     public function buildFieldTag(Types\StructType $struct, Type $field): string {

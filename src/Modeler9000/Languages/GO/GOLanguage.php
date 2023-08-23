@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,38 +11,38 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Configuration;
-use DCarbone\JSONModeler\Language;
-use DCarbone\JSONModeler\Namer;
-use DCarbone\JSONModeler\Parser;
-use DCarbone\JSONModeler\Typer;
-use DCarbone\JSONModeler\Writer;
+use DCarbone\Modeler9000\Configuration;
+use DCarbone\Modeler9000\Language;
+use DCarbone\Modeler9000\Namer;
+use DCarbone\Modeler9000\Parser;
+use DCarbone\Modeler9000\Typer;
+use DCarbone\Modeler9000\Writer;
 
 /**
  * Class GOLanguage
- * @package DCarbone\JSONModeler\Languages\GO
+ * @package DCarbone\Modeler9000\Languages\GO
  */
 class GOLanguage implements Language {
     const NAME = 'golang';
 
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOConfiguration */
+    /** @var \DCarbone\Modeler9000\Languages\GO\GOConfiguration */
     protected GOConfiguration $configuration;
-    /** @var \DCarbone\JSONModeler\Languages\GO\GONamer */
+    /** @var \DCarbone\Modeler9000\Languages\GO\GONamer */
     protected GONamer $namer;
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOTyper */
+    /** @var \DCarbone\Modeler9000\Languages\GO\GOTyper */
     protected GOTyper $typer;
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOParser */
+    /** @var \DCarbone\Modeler9000\Languages\GO\GOParser */
     protected GOParser $parser;
-    /** @var \DCarbone\JSONModeler\Languages\GO\GOWriter */
+    /** @var \DCarbone\Modeler9000\Languages\GO\GOWriter */
     protected GOWriter $writer;
 
     /**
      * GOLanguage constructor.
-     * @param \DCarbone\JSONModeler\Languages\GO\GOConfiguration|null $configuration
-     * @param \DCarbone\JSONModeler\Languages\GO\GONamer|null $namer
-     * @param \DCarbone\JSONModeler\Languages\GO\GOTyper|null $typer
-     * @param \DCarbone\JSONModeler\Languages\GO\GOParser|null $parser
-     * @param \DCarbone\JSONModeler\Languages\GO\GOWriter|null $writer
+     * @param \DCarbone\Modeler9000\Languages\GO\GOConfiguration|null $configuration
+     * @param \DCarbone\Modeler9000\Languages\GO\GONamer|null $namer
+     * @param \DCarbone\Modeler9000\Languages\GO\GOTyper|null $typer
+     * @param \DCarbone\Modeler9000\Languages\GO\GOParser|null $parser
+     * @param \DCarbone\Modeler9000\Languages\GO\GOWriter|null $writer
      */
     public function __construct(?GOConfiguration $configuration = null,
                                 ?GONamer $namer = null,
@@ -60,35 +64,35 @@ class GOLanguage implements Language {
     }
 
     /**
-     * @return \DCarbone\JSONModeler\Configuration
+     * @return \DCarbone\Modeler9000\Configuration
      */
     public function configuration(): Configuration {
         return $this->configuration;
     }
 
     /**
-     * @return \DCarbone\JSONModeler\Namer
+     * @return \DCarbone\Modeler9000\Namer
      */
     public function namer(): Namer {
         return $this->namer;
     }
 
     /**
-     * @return \DCarbone\JSONModeler\Parser
+     * @return \DCarbone\Modeler9000\Parser
      */
     public function parser(): Parser {
         return $this->parser;
     }
 
     /**
-     * @return \DCarbone\JSONModeler\Typer
+     * @return \DCarbone\Modeler9000\Typer
      */
     public function typer(): Typer {
         return $this->typer;
     }
 
     /**
-     * @return \DCarbone\JSONModeler\Writer
+     * @return \DCarbone\Modeler9000\Writer
      */
     public function writer(): Writer {
         return $this->writer;

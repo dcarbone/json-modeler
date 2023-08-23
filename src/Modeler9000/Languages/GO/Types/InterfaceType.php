@@ -1,4 +1,8 @@
-<?php namespace DCarbone\JSONModeler\Languages\GO\Types;
+<?php
+
+declare(strict_types=1);
+
+namespace DCarbone\Modeler9000\Languages\GO\Types;
 
 /*
  * Copyright (C) 2016-2023 Daniel Carbone (daniel.p.carbone@gmail.com)
@@ -7,11 +11,11 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-use DCarbone\JSONModeler\Languages\GO\GOTyper;
+use DCarbone\Modeler9000\Languages\GO\GOTyper;
 
 /**
  * Class InterfaceType
- * @package DCarbone\JSONModeler\Languages\GO\Types
+ * @package DCarbone\Modeler9000\Languages\GO\Types
  */
 class InterfaceType extends AbstractType {
     /**
