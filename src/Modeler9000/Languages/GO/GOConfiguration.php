@@ -21,31 +21,37 @@ use Psr\Log\NullLogger;
  * Class GOConfiguration
  * @package DCarbone\Modeler9000\Languages\GO
  */
-class GOConfiguration implements Configuration {
-
+class GOConfiguration implements Configuration
+{
     use LoggerAwareTrait;
 
-    const KEY_ForceOmitEmpty = 'forceOmitEmpty';
-    const KEY_ForceIntToFloat = 'forceIntToFloat';
-    const KEY_UseSimpleInt = 'useSimpleInt';
-    const KEY_ForceScalarToPointer = 'forceScalarToPointer';
-    const KEY_ScalarPointersInSlices = 'scalarPointersInSlices';
-    const KEY_EmptyStructToInterface = 'emptyStructToInterface';
-    const KEY_BreakOutInlineStructs = 'breakOutInlineStructs';
-    const KEY_InitialNumberMap = 'initialNumberMap';
-    const KEY_SingleTypeBlock = 'singleTypeBlock';
+    public const KEY_ForceOmitEmpty = 'forceOmitEmpty';
+    public const KEY_ForceIntToFloat = 'forceIntToFloat';
+    public const KEY_UseSimpleInt = 'useSimpleInt';
+    public const KEY_ForceScalarToPointer = 'forceScalarToPointer';
+    public const KEY_ScalarPointersInSlices = 'scalarPointersInSlices';
+    public const KEY_EmptyStructToInterface = 'emptyStructToInterface';
+    public const KEY_BreakOutInlineStructs = 'breakOutInlineStructs';
+    public const KEY_InitialNumberMap = 'initialNumberMap';
+    public const KEY_SingleTypeBlock = 'singleTypeBlock';
+
+    public const KEY_AdditionalTags = 'additionalTags';
+
+    public const KEY_InvalidBeginningCharacterPrefix = 'invalidBeginningCharacterPrefix';
 
     /** @var array */
     protected static array $defaultValues = [
-        self::KEY_ForceOmitEmpty         => false,
-        self::KEY_ForceIntToFloat        => false,
-        self::KEY_UseSimpleInt           => false,
-        self::KEY_ForceScalarToPointer   => false,
+        self::KEY_ForceOmitEmpty => false,
+        self::KEY_ForceIntToFloat => false,
+        self::KEY_UseSimpleInt => false,
+        self::KEY_ForceScalarToPointer => false,
         self::KEY_ScalarPointersInSlices => false,
         self::KEY_EmptyStructToInterface => false,
-        self::KEY_BreakOutInlineStructs  => true,
-        self::KEY_SingleTypeBlock        => false,
-        self::KEY_InitialNumberMap       => [
+        self::KEY_BreakOutInlineStructs => true,
+        self::KEY_SingleTypeBlock => false,
+        self::KEY_AdditionalTags => [],
+        self::KEY_InvalidBeginningCharacterPrefix => 'X',
+        self::KEY_InitialNumberMap => [
             'Zero_',
             'One_',
             'Two_',
@@ -97,7 +103,7 @@ class GOConfiguration implements Configuration {
         if (isset($this->options[$key])) {
             return $this->values[$key];
         }
-        throw new \OutOfBoundsException("No key named \"{$key}\" found in ".get_class($this));
+        throw new \OutOfBoundsException("No key named \"{$key}\" found in " . get_class($this));
     }
 
     /**
@@ -109,12 +115,12 @@ class GOConfiguration implements Configuration {
             if (gettype($value) === $this->options[$key]) {
                 $this->values[$key] = $value;
             } else {
-                throw new \InvalidArgumentException("Key \"{$key}\" must be of type \"{$this->options[$key]}\", \"".
-                    gettype($value).
+                throw new \InvalidArgumentException("Key \"{$key}\" must be of type \"{$this->options[$key]}\", \"" .
+                    gettype($value) .
                     '" provided');
             }
         } else {
-            throw new \OutOfBoundsException("No key named \"{$key}\" found in ".get_class($this));
+            throw new \OutOfBoundsException("No key named \"{$key}\" found in " . get_class($this));
         }
     }
 
@@ -140,12 +146,27 @@ class GOConfiguration implements Configuration {
      * @return string
      */
     public function buildFieldTag(Types\StructType $struct, Type $field): string {
-        $tag = sprintf('json:"%s', $field->name());
+        $tagDef = $this->_buildFieldTag($field, 'json', $field->isAlwaysDefined() || $this->get(self::KEY_ForceOmitEmpty) ? 'omitempty': '');
 
-        if (!$field->isAlwaysDefined() || $this->get(self::KEY_ForceOmitEmpty)) {
-            $tag = sprintf('%s,omitempty', $tag);
+        foreach ($this->get(self::KEY_AdditionalTags) as $tagName) {
+            $tagDef = sprintf('%s %s', $tagDef, $this->_buildFieldTag($field, $tagName));
         }
 
-        return sprintf('%s"', $tag);
+        return $tagDef;
+    }
+
+    /**
+     * @param Type $field
+     * @param string $tagName
+     * @param string ...$extra
+     * @return string
+     */
+    protected function _buildFieldTag(Type $field, string $tagName, string... $extra): string {
+        $extra = array_filter($extra);
+        $out = sprintf('%s:"%s', $tagName, $field->name());
+        if ($extra !== []) {
+            $out = sprintf('%s,%s', $out, implode(',', $extra));
+        }
+        return sprintf('%s"', $out);
     }
 }

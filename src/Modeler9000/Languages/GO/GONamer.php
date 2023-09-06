@@ -101,7 +101,11 @@ class GONamer implements Namer {
 
         // If this starts with anything other than an alpha character prefix with X
         if (preg_match('/^[^a-zA-Z]/S', $name)) {
-            $name = sprintf('X%s', $name);
+            $name = sprintf(
+                '%s%s',
+                $this->language->configuration()->get(GOConfiguration::KEY_InvalidBeginningCharacterPrefix),
+                $name,
+            );
         }
 
         // Do stuff with non-alphanumeric characters
